@@ -252,20 +252,20 @@ ul.ht-cues li::before{content:"";position:absolute;left:3px;top:8px;width:7px;he
 .sym-nudge{display:flex;gap:10px;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:11px 13px;margin-bottom:16px;box-shadow:var(--shadow);font-size:14px}
 
 /* v2: floating timer + completed exercises + warm-up set */
-.timer-float{position:fixed;right:14px;bottom:calc(78px + env(safe-area-inset-bottom));z-index:85;display:flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:0 8px 28px rgba(0,0,0,.24);padding:7px;max-width:min(360px,calc(100vw - 28px))}
+.timer-float{position:fixed;right:10px;bottom:calc(92px + env(safe-area-inset-bottom));z-index:85;display:flex;align-items:center;gap:5px;background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 28px rgba(0,0,0,.24);padding:6px;max-width:min(300px,calc(100vw - 20px))}
 .timer-float.running{border-color:var(--accent);box-shadow:0 8px 30px rgba(255,90,31,.22)}
 .timer-float.done{border-color:var(--accent);background:var(--accent);color:#fff;animation:timerPulse .75s ease-in-out infinite alternate}
 @keyframes timerPulse{from{transform:translateY(0) scale(1)}to{transform:translateY(-1px) scale(1.015)}}
-.timer-main{border:none;background:transparent;color:inherit;display:flex;align-items:center;gap:8px;padding:4px 6px;border-radius:13px;min-width:86px;text-align:left}
+.timer-main{border:none;background:transparent;color:inherit;display:flex;align-items:center;gap:7px;padding:3px 5px;border-radius:12px;min-width:74px;text-align:left}
 .timer-main:active{background:var(--surface-2)}
 .timer-float.done .timer-main:active{background:rgba(255,255,255,.16)}
 .timer-dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);flex:none}
 .timer-float.done .timer-dot{background:#fff;box-shadow:0 0 0 4px rgba(255,255,255,.18)}
-.timer-mini-time{font-family:ui-monospace,"Roboto Mono",monospace;font-weight:800;font-size:19px;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
-.timer-mini-label{font-size:10.5px;color:var(--text-dim);font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-top:2px;white-space:nowrap}
+.timer-mini-time{font-family:ui-monospace,"Roboto Mono",monospace;font-weight:800;font-size:17px;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
+.timer-mini-label{font-size:9.5px;color:var(--text-dim);font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-top:2px;white-space:nowrap}
 .timer-float.done .timer-mini-label{color:rgba(255,255,255,.8)}
 .timer-mini-actions{display:flex;align-items:center;gap:4px}
-.timer-mini-actions button{height:32px;min-width:34px;border:1px solid var(--line);background:var(--surface-2);color:var(--text);border-radius:10px;font-weight:800;font-size:13px;padding:0 8px}
+.timer-mini-actions button{height:30px;min-width:30px;border:1px solid var(--line);background:var(--surface-2);color:var(--text);border-radius:10px;font-weight:800;font-size:12px;padding:0 6px}
 .timer-mini-actions button:active{transform:scale(.96)}
 .timer-float.done .timer-mini-actions button{border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.15);color:#fff}
 .ex-card.done{border-color:rgba(255,90,31,.42);background:linear-gradient(0deg,var(--surface),var(--surface)),var(--accent-soft)}
@@ -273,7 +273,7 @@ ul.ht-cues li::before{content:"";position:absolute;left:3px;top:8px;width:7px;he
 .finish-ex{margin-top:8px;border-color:var(--accent);color:var(--accent)}
 .set-row.warmup-row{background:var(--accent-soft);border:1px solid rgba(255,90,31,.28);border-radius:12px;padding:7px 6px;margin:3px 0 6px}
 .warm-tag{display:inline-flex;align-items:center;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:2px 7px;border-radius:999px;margin-right:6px}
-@media (max-width:380px){.timer-float{right:10px;bottom:calc(72px + env(safe-area-inset-bottom));padding:6px}.timer-mini-actions button{min-width:30px;padding:0 6px}.timer-mini-time{font-size:18px}}
+@media (max-width:380px){.timer-float{right:8px;bottom:calc(88px + env(safe-area-inset-bottom));padding:5px}.timer-mini-actions button{min-width:28px;padding:0 5px}.timer-mini-time{font-size:16px}.timer-mini-label{display:none}}
 
 /* v3: workout flow, duration, manual warm-up sets */
 .workout-progress{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:12px 13px;margin-bottom:14px}
@@ -284,12 +284,21 @@ ul.ht-cues li::before{content:"";position:absolute;left:3px;top:8px;width:7px;he
 .wp-fill{height:100%;background:var(--accent);border-radius:999px;transition:width .2s ease}
 .wp-actions{display:flex;gap:8px;margin-top:10px}
 .wp-actions .btn{height:38px;font-size:13px}
-.warm-toggle{border:1px solid var(--line);background:var(--surface-2);color:var(--text-dim);border-radius:999px;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;line-height:1}
-.warm-toggle.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.warm-toggle{border:1px dashed var(--line);background:transparent;color:var(--text-ghost);border-radius:999px;font-size:10px;font-weight:700;letter-spacing:.02em;text-transform:none;padding:3px 7px;line-height:1;opacity:.72}
+.warm-toggle.on{border-style:solid;border-color:var(--accent);background:var(--accent-soft);color:var(--accent);opacity:1;text-transform:uppercase;font-weight:800;letter-spacing:.04em}
+.set-row:not(.warmup-row) .warm-toggle{opacity:.45}
+.set-row:not(.warmup-row) .warm-toggle::after{content:""}
 .work-vol{display:flex;gap:10px;align-items:flex-start;min-width:116px}
 .work-vol .vol{min-width:0}
 .duration-pill{display:inline-flex;align-items:center;gap:4px;color:var(--text-dim);font-size:12.5px}
 .finish-ex{margin-top:10px}
+
+.finish-head{width:32px;height:32px;border:1px solid var(--line);background:var(--surface-2);color:var(--text-dim);border-radius:9px;display:flex;align-items:center;justify-content:center;flex:none}
+.finish-head svg{width:17px;height:17px}
+.finish-head:active{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+.validation-list{margin:8px 0 0;padding:0;list-style:none}
+.validation-list li{position:relative;padding:0 0 8px 20px;font-size:14px;line-height:1.45;color:var(--text)}
+.validation-list li::before{content:"";position:absolute;left:3px;top:8px;width:7px;height:7px;border-radius:50%;background:var(--accent)}
 
 </style>
 </head>
@@ -753,6 +762,7 @@ function render(){
   else if(v==="editor") body=renderEditor();
   else if(v==="tpl") body=renderTplEditor(route.dayId);
   host.innerHTML=topBanner()+body;
+  if(document.getElementById("overlay").classList.contains("hidden")) lockScroll(false);
 }
 function renderTopbar(){
   const v=route.view; const tb=document.getElementById("topbar"); let t="";
@@ -1024,7 +1034,7 @@ function exerciseCard(e,i){
     rows+='<div class="set-row'+(warm?' warmup-row':'')+'">'+main+'<div class="set-sub">'+
         '<span class="ghost">'+gtxt+'</span>'+
         '<span style="display:flex;align-items:center;gap:6px">'+
-          (ty==="wr"?'<button class="warm-toggle '+(warm?'on':'')+'" onclick="App.toggleWarmup('+i+','+j+')">разминка</button>':'')+
+          (ty==="wr"?'<button class="warm-toggle '+(warm?'on':'')+'" aria-label="'+(warm?'Разминочный подход':'Сделать разминочным')+'" title="'+(warm?'Разминочный подход':'Сделать разминочным')+'" onclick="App.toggleWarmup('+i+','+j+')">'+(warm?'разминка':'разм.')+'</button>':'')+
           (ty==="wr"?('<span class="pr-badge" id="pr-'+i+'-'+j+'" '+(pr?"":'style="display:none"')+'><span class="flame">'+ICON.flame+'</span>рекорд</span>'):'')+
         '</span>'+
       '</div></div>';
@@ -1033,6 +1043,7 @@ function exerciseCard(e,i){
       '<div class="ex-bar open">'+
         '<button class="exchev open" aria-label="Свернуть упражнение" onclick="App.toggleExercise('+i+')">'+ICON.fwd+'</button>'+
         '<input class="name-in" list="exNames" value="'+esc(e.name)+'" placeholder="Упражнение" aria-label="Название упражнения" onchange="App.onName('+i+',this.value)">'+
+        '<button class="finish-head" aria-label="Упражнение закончено" title="Упражнение закончено" onclick="App.finishExercise('+i+')">'+ICON.check+'</button>'+
         '<button class="hbtn" aria-label="Как делать" onclick="App.howto('+i+')">'+ICON.help+'</button>'+
         '<button class="icon-btn danger" aria-label="Удалить упражнение" onclick="App.removeExercise('+i+')">'+ICON.trash+'</button>'+
       '</div>'+
@@ -1265,7 +1276,40 @@ function removeExercise(i){ const e=draft.exercises[i]; const has=(e.name&&e.nam
   const doIt=function(){ draft.exercises.splice(i,1); if(!draft.exercises.length) draft.exercises.push({id:gid(),name:"",note:"",sets:[makeSet("wr",true)]}); draftTouched=true; persistDraft(); render(); refreshTotals(); };
   if(has) confirmDialog("Удалить упражнение?","«"+(e.name.trim()||"без названия")+"» и его подходы.","Удалить",true,doIt); else doIt();
 }
-function saveDraft(){
+function validateDraftIssues(){
+  const issues=[];
+  if(!draft) return issues;
+  draft.exercises.forEach(function(e){
+    const name=(e.name||"Упражнение").trim()||"Упражнение";
+    const ty=exType(e);
+    const filled=(e.sets||[]).filter(function(s){ return ty==="time"?String(s.sec).trim()!=="" : ty==="reps"?String(s.reps).trim()!=="" : (String(s.weight).trim()!==""||String(s.reps).trim()!==""); });
+    if(!filled.length && name){ issues.push(name+": нет заполненных подходов"); return; }
+    if(ty==="wr"){
+      let work=0,warm=0;
+      filled.forEach(function(s,idx){
+        const hasW=String(s.weight).trim()!=="", hasR=String(s.reps).trim()!=="";
+        if(hasW&&!hasR) issues.push(name+": есть вес, но нет повторов");
+        if(hasR&&!hasW) issues.push(name+": есть повторы, но нет веса");
+        if(isWarmupSet(e,s,idx)) warm++; else work++;
+      });
+      if(filled.length && work===0) issues.push(name+": все подходы отмечены как разминка");
+      if(work>0 && work<4) issues.push(name+": рабочих подходов "+work+" вместо 4");
+      if(warm===0 && work>0) issues.push(name+": нет разминочного подхода");
+    }
+  });
+  const dur=draft.startedAt?Math.round((Date.now()-draft.startedAt)/60000):0;
+  if(dur>0 && dur<10 && draft.exercises.some(function(e){ return (e.sets||[]).some(function(s){ return String(s.weight||s.reps||s.sec).trim()!==""; }); })) issues.push("Длительность меньше 10 минут — проверь, не открыт ли черновик заново перед сохранением");
+  return issues;
+}
+function saveDraft(force){
+  if(force===true) closeSheet();
+  if(force!==true){
+    const issues=validateDraftIssues();
+    if(issues.length){
+      openSheet('<div class="grip-x"></div><h3>Проверь перед сохранением</h3><p>Нашёл возможные ошибки. Можно сохранить как есть или вернуться и поправить.</p><ul class="validation-list">'+issues.slice(0,7).map(function(x){return '<li>'+esc(x)+'</li>';}).join('')+(issues.length>7?'<li>И ещё '+(issues.length-7)+' пункт(ов)</li>':'')+'</ul><div class="sheet-actions" style="margin-top:10px"><button class="btn btn-primary btn-block" onclick="App.saveDraft(true)">Сохранить всё равно</button><button class="btn btn-ghost btn-block" onclick="App.closeSheet()">Вернуться</button></div>');
+      return;
+    }
+  }
   const exs=[];
   draft.exercises.forEach(e=>{
     var ty=exType(e);
@@ -1389,7 +1433,7 @@ function lockScroll(on){ const v=document.getElementById("view"); if(v) v.style.
 function openSheet(html){ const o=document.getElementById("overlay"); o.innerHTML='<div class="sheet" role="dialog" aria-modal="true">'+html+'</div>'; o.classList.remove("hidden"); lockScroll(true);
   o.onclick=function(e){ if(e.target===o) closeSheet(); };
   setTimeout(function(){ const el=o.querySelector("input,button"); if(el) el.focus(); },40); }
-function closeSheet(){ const o=document.getElementById("overlay"); o.classList.add("hidden"); o.innerHTML=""; if(timerHidden()) lockScroll(false); }
+function closeSheet(){ const o=document.getElementById("overlay"); o.classList.add("hidden"); o.innerHTML=""; lockScroll(false); }
 let cbConfirm=null,cbPrompt=null;
 function confirmDialog(title,msg,okLabel,danger,cb){ cbConfirm=cb;
   openSheet('<h3>'+esc(title)+'</h3><p>'+esc(msg)+'</p><div class="sheet-actions">'+
