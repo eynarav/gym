@@ -300,6 +300,12 @@ ul.ht-cues li::before{content:"";position:absolute;left:3px;top:8px;width:7px;he
 .validation-list li{position:relative;padding:0 0 8px 20px;font-size:14px;line-height:1.45;color:var(--text)}
 .validation-list li::before{content:"";position:absolute;left:3px;top:8px;width:7px;height:7px;border-radius:50%;background:var(--accent)}
 
+
+/* v5: program-only import and compact planned workload */
+.plan-note{margin:6px 0 10px;font-size:12.5px}.plan-intro{font-size:13px;line-height:1.5;padding:12px;border:1px solid var(--line);border-radius:12px;margin-bottom:12px;background:var(--surface)}
+.brief-inline{margin:4px 0 12px;font-size:13px}.brief-inline summary,.old-days summary{cursor:pointer;color:var(--text-dim);font-weight:650}.brief-inline p{margin:8px 0}.old-days{margin:16px 0}.old-days>summary{padding:12px 2px}.plan-edit-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0;font-size:12px;color:var(--text-dim)}
+.name-in{min-width:0}.ex-head,.ex-bar{min-width:0}.si{font-size:12px}.sin::placeholder{opacity:.6}#view{min-height:0}.ex-tn{white-space:normal}.det-set .dn{width:24px}.field .fin{min-width:0}
+
 </style>
 </head>
 <body>
@@ -312,6 +318,7 @@ ul.ht-cues li::before{content:"";position:absolute;left:3px;top:8px;width:7px;he
 <div id="timer" class="hidden"></div>
 <div id="toast" class="toast hidden"></div>
 <input type="file" id="importFile" accept=".json,application/json" class="hidden">
+<input type="file" id="programFile" accept=".json,application/json" class="hidden">
 
 <script>
 "use strict";
@@ -320,6 +327,8 @@ const KEY = "gymlog_v1";
 const PREV_KEY = "gymlog_v1_prev";
 const DRAFT_KEY = "gymlog_v1_draft";
 const VERSION = 1;
+const APP_VERSION="5.1";
+const EMBEDDED_PROGRAM={"format":"gymlog-program","formatVersion":1,"id":"gym_ab_202609","title":"Зал A/B · сила и выносливость · ред. 2","created":"2026-09-13","minAppVersion":"5.0","description":"Два чередующихся фуллбоди только для зала. Без домашних заданий, стоек, перемещений и работы с оружием. Бои 1–2 раза в месяц не учитываются как регулярная дополнительная тренировка.","rules":["Чередуй Зал A → Зал B независимо от дней недели. Желательный, но не обязательный ритм — около 2 посещений в неделю.","Фактические промежутки в журнале: 2–12 дней. Перерыв 9–12 дней не обнуляет программу: сначала проверь разминку и первый рабочий подход. При необычной тяжести оставь 2 рабочих подхода и/или снизь вес на 5–10%.","Начало занятия: 5–8 минут спокойного велосипеда, эллипса или дорожки; затем специфическая разминка упражнения.","У весовых упражнений предусмотрен один разминочный подход примерно с половиной фактического рабочего веса, 8–10 повторов без утомления. Округляй под доступный инвентарь; при необходимости добавь короткий промежуточный разминочный подход. Гиперэкстензия без внешнего груза — исключение: 5–6 лёгких разминочных повторов с собственным весом, затем рабочие подходы. Ноль в поле веса означает отсутствие дополнительного груза, а не отсутствие нагрузки.","Основные упражнения по 3 рабочих подхода, дополнительные по 2. Запас обычно 2–3 повторения; в первое занятие больше ориентируйся на 3. Четыре подхода больше не обязательны.","Стартовые килограммы — ориентиры для прежних тренажёров, не точная обязанность. В дневник заноси только фактически выполненное.","Гантели в жиме, молоте и махах записывай суммой пары. Гоблет-присед — масса одной гантели. Старые записи автоматически не пересчитываются.","При достижении верхней границы всех рабочих подходов с запасом не меньше 2 два раза подряд можно добавить минимальный доступный вес. Не повышай одновременно вес и количество подходов.","Не пропускай занятие только из-за нехватки времени: короткий вариант — первые 4 упражнения по 2 рабочих подхода; остальные удали из текущей карточки или оставь пустыми с заметкой. Сохранение с предупреждением разрешено.","Оцени результат после 8 фактических посещений. Разгрузка по номеру календарной недели не назначается автоматически.","Умеренная мышечная болезненность может быть, но не обязательна. Новая боль в суставе, боль с отдачей, онемение или головокружение — причина остановить провоцирующее упражнение и оценить состояние.","Это общефизическая подготовка, не программа лечения дефицита тестостерона. Подтверждённо низкие анализы требуют отдельного обсуждения с врачом."],"cardio":"После каждой силовой: 20–30 минут ровного кардио (эллипс, велотренажёр или ходьба). Можно говорить полными фразами, но петь уже трудно. Пульс 120–130 — лишь предварительный ориентир по твоим записям, не измеренная персональная зона. Первые 4 посещения — без интервалов. Затем, при хорошем восстановлении, раз в 3–4 посещения можно ВМЕСТО обычного кардио: 5 минут спокойно + 6 × (30 секунд бодро, не спринт / 90 секунд легко) + 5 минут спокойно. Длительность такого варианта — 22 минуты.","days":[{"key":"A","name":"Зал A · ноги, грудь, спина","exercises":[{"name":"Жим ногами в тренажёре","type":"wr","target":"8–12","rest":150,"workSets":3,"warmupSets":1,"repMin":8,"repMax":12,"warmupReps":8,"rirTarget":2,"unit":"вес тренажёра","brief":"Опускай платформу в удобной амплитуде и выжимай всей стопой, не отрывая таз.","steps":["Настрой сиденье; стопы на платформе примерно на ширине плеч. Спина и таз в опоре.","Плавно согни ноги до глубины, на которой таз не подкручивается и не отрывается.","Выжми платформу без рывка; колени идут в направлении носков."],"cues":["Не выпрямляй колени ударом и не задерживай дыхание на весь подход.","100 кг — ориентир на прежнем тренажёре; подбери вес под запас 2–3 повтора."],"note":"","startWeight":100},{"name":"Жим от груди в тренажёре","type":"wr","target":"8–12","rest":150,"workSets":3,"warmupSets":1,"repMin":8,"repMax":12,"warmupReps":8,"rirTarget":2,"unit":"вес тренажёра","brief":"Выжимай рукояти вперёд из устойчивой опоры спиной, затем плавно возвращай.","steps":["Настрой сиденье так, чтобы рукояти были примерно на уровне середины груди.","Спина в опоре, локти не разводи строго в стороны; выбери удобный хват.","Выжми вперёд без рывка и верни рукояти за 2–3 секунды."],"cues":["Шея в удобном нейтральном положении; не тяни голову к рукоятям.","43 кг — пробный ориентир или ближайшая удобная ступень стека."],"note":"","startWeight":43},{"name":"Тяга верхнего блока к груди","type":"wr","target":"10–12","rest":150,"workSets":3,"warmupSets":1,"repMin":10,"repMax":12,"warmupReps":8,"rirTarget":2,"unit":"вес тренажёра","brief":"Тяни рукоять к верхней части груди, ведя локти вниз, без раскачивания.","steps":["Устройся под фиксирующим валиком, возьми удобную нейтральную или обычную рукоять.","С небольшим постоянным отклонением корпуса тяни локти вниз к бокам.","Плавно верни руки вверх, сохраняя контроль груза."],"cues":["Не тяни за голову и не делай рывок корпусом.","Лямки необязательны: используй их, если хват ограничивает спину."],"note":"","startWeight":45},{"name":"Сгибание ног лёжа/сидя","type":"wr","target":"10–15","rest":90,"workSets":2,"warmupSets":1,"repMin":10,"repMax":15,"warmupReps":10,"rirTarget":2,"unit":"вес тренажёра","brief":"Сгибай колени, удерживая бёдра и таз в опоре; медленно возвращай голени.","steps":["Совмести ось коленного сустава с осью тренажёра. Валик — на нижней части голени, не на пятке.","Лёжа: таз прижат к скамье. Сидя: спина в опоре, бёдра зафиксированы верхним валиком.","Согни ноги без рывка; верни груз подконтрольно за 2–3 секунды."],"cues":["Не помогай движению прогибом поясницы.","Сохраняй удобную амплитуду без боли."],"note":"","startWeight":40},{"name":"Гиперэкстензия (45°)","type":"wr","target":"10–15","rest":90,"workSets":2,"warmupSets":1,"repMin":10,"repMax":15,"warmupReps":6,"rirTarget":2,"unit":"только дополнительный груз; 0 кг = собственный вес","brief":"Сгибайся в тазобедренных суставах и поднимай корпус до одной линии с ногами, без прогиба назад.","steps":["Настрой опору под верхнюю часть бёдер так, чтобы тазобедренные суставы могли сгибаться. Стопы надёжно зафиксированы, руки на груди.","Плавно наклони корпус вперёд в удобной амплитуде, сохраняя управляемое положение спины. Голова следует за корпусом.","Разогни тазобедренные суставы до прямой линии корпуса и ног. Не запрокидывай голову и не отклоняйся дальше назад."],"cues":["Начни без блина или гантели. В поле веса вводи 0 кг и обязательно указывай повторы: собственный вес тоже создаёт нагрузку.","Разминка: 5–6 лёгких повторов без внешнего груза, затем 2×10–15 с запасом 2–3 повтора. Уменьшать массу тела вдвое не нужно.","Не превращай движение в рывки поясницей; заканчивай до потери контроля."],"note":"","startWeight":0},{"name":"Махи гантелями в стороны (вес пары)","type":"wr","target":"12–18","rest":75,"workSets":2,"warmupSets":1,"repMin":12,"repMax":18,"warmupReps":10,"rirTarget":2,"unit":"сумма двух гантелей","brief":"Подними слегка согнутые руки в стороны и немного вперёд, примерно до уровня плеч.","steps":["Начни с гантелями по 4 кг: в приложение вводи 8 кг за пару.","Подними руки в стороны чуть впереди корпуса; кисти нейтральны, большие пальцы не разворачивай специально вниз.","Опусти гантели спокойно, без раскачки и пожимания плечами."],"cues":["Ранее способ записи махов неясен: новую серию ведём отдельно, старые цифры не пересчитываем.","8 кг за пару — пробный старт; уменьши вес, если не хватает контроля."],"note":"","startWeight":8},{"name":"Сгибание «молот»","type":"wr","target":"10–15","rest":90,"workSets":2,"warmupSets":1,"repMin":10,"repMax":15,"warmupReps":10,"rirTarget":2,"unit":"сумма двух гантелей","brief":"Сгибай руки с ладонями друг к другу, не раскачивая корпус.","steps":["Возьми по 10 кг в каждую руку: в приложении 20 кг за пару.","Локти около корпуса; подними обе гантели без движения плечом вперёд.","Плавно опусти. Один повтор — один подъём обеих рук."],"cues":["Не нужно сжимать рукояти до предела или резко выпрямлять локти.","Если выполняешь поочерёдно, число повторов означает число на каждую руку."],"note":"","startWeight":20},{"name":"Разгибание на трицепс (канат)","type":"wr","target":"12–15","rest":90,"workSets":2,"warmupSets":1,"repMin":12,"repMax":15,"warmupReps":8,"rirTarget":2,"unit":"вес тренажёра","brief":"Разгибай локти, опуская канат к бёдрам; держи корпус устойчиво и возвращай рукоять плавно.","steps":["Закрепи канат на верхнем блоке. Встань устойчиво, возьми концы каната ладонями друг к другу, локти около боков.","Разогни руки вниз без движения плечом и без наваливания корпусом на канат. Кисти остаются удобными и ровными.","Плавно согни локти, возвращая рукоять за 2–3 секунды; верхняя часть рук почти неподвижна."],"cues":["14 кг — пробный старт на знакомом блоке; выбери ближайшую ступень, позволяющую оставить 2–3 повтора в запасе.","Разминка около 7 кг на 8 повторов. Не выпрямляй локти ударом и не тяни через новую боль."],"note":"","startWeight":14},{"name":"Мёртвый жук","type":"reps","target":"8–12 на сторону","rest":60,"workSets":2,"warmupSets":0,"repMin":8,"repMax":12,"warmupReps":8,"rirTarget":2,"unit":"повторы на каждую сторону","brief":"Лёжа на спине, поочерёдно отводи противоположные руку и ногу, не выгибая поясницу.","steps":["Подними руки вверх, бёдра вертикальны, колени согнуты. Слегка напряги живот.","На спокойном выдохе отведи одну руку за голову и противоположную ногу от себя.","Вернись и поменяй сторону. Две строки в дневнике — два подхода; вводи повторы НА КАЖДУЮ сторону."],"cues":["Не стремись опустить ногу до пола ценой прогиба поясницы.","Например, 8 в поле = по 8 повторов на обе стороны, а не 8 суммарно."],"note":""}]},{"key":"B","name":"Зал B · ноги, спина, плечи","exercises":[{"name":"Гоблет-присед","type":"wr","target":"8–12","rest":150,"workSets":3,"warmupSets":1,"repMin":8,"repMax":12,"warmupReps":8,"rirTarget":2,"unit":"масса одной гантели","brief":"Удерживай одну гантель у груди и приседай на удобную глубину, опираясь всей стопой.","steps":["Возьми одну гантель 28 кг; стойка удобной ширины, носки немного наружу.","Согни колени и таз, сохраняя опору на пятку и переднюю часть стопы.","Встань без рывка. Колени следуют направлению носков."],"cues":["Не держи гантель на вытянутых руках.","Если неудобно удерживать снаряд, обсуди замену на жим ногами, а не увеличение веса любой ценой."],"note":"","startWeight":28},{"name":"Жим на наклонной (гантели)","type":"wr","target":"8–12","rest":180,"workSets":3,"warmupSets":1,"repMin":8,"repMax":12,"warmupReps":8,"rirTarget":2,"unit":"сумма двух гантелей","brief":"На невысоком наклоне выжимай гантели над грудью и плавно возвращай.","steps":["Наклон спинки примерно 15–30°. Возьми по 18 кг: в приложении суммарно 36 кг.","Стопы устойчивы, спина в опоре. Хват нейтральный или удобный полуразвёрнутый.","Выжми гантели без столкновения; опусти до комфортной глубины, локти примерно под 30–60° к корпусу."],"cues":["Не дави затылком в скамью и не делай рывок шеей.","36 кг за пару — пробный старт. Отдыхай 3 минуты, не добивай обязательные 12 повторов до отказа."],"note":"","startWeight":36},{"name":"Тяга нижнего блока сидя","type":"wr","target":"10–12","rest":150,"workSets":3,"warmupSets":1,"repMin":10,"repMax":12,"warmupReps":8,"rirTarget":2,"unit":"вес тренажёра","brief":"С устойчивым корпусом тяни рукоять к нижним рёбрам или животу.","steps":["Поставь стопы на платформу, колени слегка согнуты, спина в удобном нейтральном положении.","Тяни локти назад без отклонения корпуса рывком.","Плавно выпрями руки; не округляй поясницу ради дополнительной амплитуды."],"cues":["Не поднимай плечи к ушам.","45 кг — ориентир на прежнем тренажёре."],"note":"","startWeight":45},{"name":"Ягодичный мост / hip thrust","type":"wr","target":"10–12","rest":150,"workSets":2,"warmupSets":1,"repMin":10,"repMax":12,"warmupReps":8,"rirTarget":2,"unit":"общий внешний груз, как в прежних записях","brief":"Поднимай таз усилием ягодиц, не запрокидывая голову и не переразгибая поясницу.","steps":["Зафиксируй скамью; верх спины в опоре, груз с мягкой накладкой над тазом.","Подними таз: вверху голени примерно вертикальны, корпус и бёдра образуют почти прямую линию.","Опусти таз подконтрольно. Голова следует за корпусом без резкого запрокидывания."],"cues":["Не заменяй подъём таза прогибом поясницы.","55 кг — по той же системе учёта внешнего груза, что и в прежних записях."],"note":"","startWeight":55},{"name":"Разгибание ног в тренажёре","type":"wr","target":"12–15","rest":90,"workSets":2,"warmupSets":1,"repMin":12,"repMax":15,"warmupReps":10,"rirTarget":2,"unit":"вес тренажёра","brief":"Из опоры спиной плавно разогни колени, ненадолго задержись и медленно опусти голени.","steps":["Настрой сиденье: колени примерно совпадают с осью вращения тренажёра. Валик на нижней части голени, выше голеностопа.","Удерживай таз и спину в опоре. Разогни колени в удобной амплитуде без рывка и удара в верхней точке.","Сделай короткую паузу, затем подконтрольно опусти груз за 2–3 секунды."],"cues":["39 кг — ориентир на прежнем тренажёре. Если после гоблет-приседа и моста тяжело, снизь на ближайшую ступень, сохраняя запас 2–3 повтора.","Разминка около 19,5 кг; на прежнем стеке удобно округлить до 20 кг на 8–10 повторов.","Не отрывай таз от сиденья и не сокращай движение ради большего веса."],"note":"","startWeight":39},{"name":"Жим на плечи в тренажёре","type":"wr","target":"10–15","rest":120,"workSets":2,"warmupSets":1,"repMin":10,"repMax":15,"warmupReps":10,"rirTarget":2,"unit":"вес тренажёра","brief":"Из опоры спиной плавно выжимай рукояти вверх, сохраняя удобное положение шеи.","steps":["Настрой сиденье, чтобы начало движения было примерно у плеч; выбери удобный хват.","Выжми рукояти вверх без выраженного прогиба в пояснице.","Плавно верни груз, не упираясь затылком с усилием."],"cues":["Не надо силой прижимать лопатки вниз на всём подъёме рук.","30 кг — ориентир; если после наклонного жима тяжело, возьми 26 кг или ближайшую меньшую ступень."],"note":"","startWeight":30},{"name":"Фейс-пулл","type":"wr","target":"12–18","rest":75,"workSets":2,"warmupSets":1,"repMin":12,"repMax":18,"warmupReps":10,"rirTarget":2,"unit":"вес тренажёра","brief":"Тяни канат к лицу, разводя кисти, без движения головы к рукояти.","steps":["Поставь блок примерно на высоту лица и отойди до лёгкого натяжения троса.","Потяни кисти к бокам лица, локти примерно на уровне плеч или немного ниже — как комфортно.","Плавно выпрями руки. Груз не должен тянуть тебя вперёд."],"cues":["Вес небольшой: важнее контроль, чем усилие до отказа.","Это дополнительная работа плечевого пояса, а не лечение шеи."],"note":"","startWeight":14},{"name":"Боковая планка","type":"time","target":"20–30 с на сторону","rest":45,"workSets":4,"warmupSets":0,"repMin":20,"repMax":30,"warmupReps":10,"rirTarget":2,"unit":"секунды отдельно на каждой стороне","brief":"На боку подними таз, удерживая корпус ровно. Два подхода на каждую сторону.","steps":["Локоть под плечом, предплечье на коврике; стопы можно поставить одна перед другой.","Подними таз, не разворачиваясь и не задерживая дыхание.","Запиши Л1, П1, Л2, П2 отдельно. 20 секунд слева и 20 справа — не одна строка «40»."],"cues":["Свободная рука может лежать на бедре — поднимать её вверх не обязательно.","Если трудно удержать положение, согни колени и опирайся на них; закончи подход до потери техники."],"note":"","setLabels":["Л1","П1","Л2","П2"]}]}],"sources":[{"title":"ACSM 2026: Resistance Training Prescription","url":"https://pubmed.ncbi.nlm.nih.gov/41843416/"},{"title":"Split versus full-body, systematic review 2024","url":"https://pubmed.ncbi.nlm.nih.gov/38595233/"},{"title":"CDC: Measuring Physical Activity Intensity","url":"https://www.cdc.gov/physical-activity-basics/measuring/index.html"},{"title":"EAU Guidelines: Male Hypogonadism","url":"https://uroweb.org/guidelines/sexual-and-reproductive-health/chapter/male-hypogonadism"},{"title":"ACSM: обновление рекомендаций по силовым тренировкам, 2026","url":"https://acsm.org/resistance-training-guidelines-update-2026/"}],"revision":2,"updated":"2026-09-13","changeNote":"Возвращены гиперэкстензия и трицепс в день A, разгибание ног в день B. Остальные упражнения сохранены."};
 const ICON = {
   home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 8v8M4 9.5v5M17.5 8v8M20 9.5v5M6.5 12h11"/></svg>',
   history:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9.5h16M8.5 3v4M15.5 3v4"/></svg>',
@@ -411,7 +420,11 @@ function emptySet(t){ return t==="time"?{sec:""}:t==="reps"?{reps:""}:{weight:""
 function isWarmupSet(e,s,i){ return exType(e)==="wr" && !!(s && (typeof s.warmup==="boolean"?s.warmup:i===0)); }
 function makeSet(t,warm){ var s=emptySet(t); if(t==="wr") s.warmup=!!warm; return s; }
 function copySet(t,last,warm){ if(!last) return makeSet(t,!!warm); return t==="time"?{sec:last.sec}:t==="reps"?{reps:last.reps}:{weight:last.weight,reps:last.reps,warmup:!!warm}; }
-function draftFromSaved(e,keepId){ var ty=exType(e); return {id:(keepId&&e.id)?e.id:gid(),name:e.name,note:e.note||"",type:ty,rir:(typeof e.rir==="number"?e.rir:null),done:!!(keepId&&e.done),sets:(e.sets||[]).map((s,idx)=> ty==="time"?{sec:fmtEdit(s.sec)} : ty==="reps"?{reps:fmtEdit(s.reps)} : {weight:fmtEdit(s.weight),reps:fmtEdit(s.reps),warmup:isWarmupSet(e,s,idx)})}; }
+function draftFromSaved(e,keepId){
+  const ty=exType(e);
+  return Object.assign({id:keepId&&e.id?e.id:gid(),name:e.name,note:e.note||"",type:ty,rir:keepId&&typeof e.rir==="number"?e.rir:null,done:!!(keepId&&e.done),
+    sets:(e.sets||[]).map((s,i)=>ty==="time"?{...setSideMeta(s),sec:fmtEdit(s.sec)}:ty==="reps"?{...setSideMeta(s),reps:fmtEdit(s.reps)}:{weight:fmtEdit(s.weight),reps:fmtEdit(s.reps),warmup:isWarmupSet(e,s,i)})},exercisePlanMeta(e));
+}
 
 const ILLO_LEGPRESS='<svg viewBox="0 0 320 195" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Жим ногами: начало и конец"><line x1="160" y1="15" x2="160" y2="165" stroke="var(--line)" stroke-width="1.2" stroke-dasharray="3 5"/><g stroke="var(--muted)" stroke-width="3" fill="none" stroke-linecap="round"><line x1="30" y1="150" x2="80" y2="150"/><line x1="34" y1="148" x2="22" y2="88"/><line x1="46" y1="118" x2="112" y2="145"/></g><g stroke="var(--ink)" stroke-width="8" fill="none" stroke-linecap="round"><line x1="42" y1="146" x2="35" y2="92"/><line x1="44" y1="140" x2="92" y2="118"/><line x1="92" y1="118" x2="102" y2="152"/></g><circle cx="36" cy="80" r="9" fill="var(--ink)"/><line x1="96" y1="148" x2="112" y2="140" stroke="var(--ink)" stroke-width="7" stroke-linecap="round"/><text x="80" y="182" text-anchor="middle" font-size="13" fill="var(--text-dim)" font-family="system-ui,sans-serif">начало</text><g stroke="var(--muted)" stroke-width="3" fill="none" stroke-linecap="round"><line x1="190" y1="150" x2="240" y2="150"/><line x1="194" y1="148" x2="182" y2="88"/><line x1="206" y1="118" x2="292" y2="65"/></g><g stroke="var(--ink)" stroke-width="8" fill="none" stroke-linecap="round"><line x1="202" y1="146" x2="195" y2="92"/><line x1="204" y1="140" x2="252" y2="108"/><line x1="252" y1="108" x2="288" y2="68"/></g><circle cx="196" cy="80" r="9" fill="var(--ink)"/><line x1="278" y1="62" x2="296" y2="70" stroke="var(--accent)" stroke-width="7" stroke-linecap="round"/><text x="240" y="182" text-anchor="middle" font-size="13" font-weight="700" fill="var(--accent)" font-family="system-ui,sans-serif">конец</text><path d="M124 108 Q142 100 156 108" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="2 6"/><path d="M150 103 L157 108 L150 113" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const ILLO_PLANK='<svg viewBox="0 0 320 175" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Планка: частая ошибка и правильное положение"><line x1="160" y1="15" x2="160" y2="152" stroke="var(--line)" stroke-width="1.2" stroke-dasharray="3 5"/><line x1="20" y1="145" x2="140" y2="145" stroke="var(--muted)" stroke-width="2" stroke-linecap="round"/><path d="M70 116 L128 140" stroke="var(--muted)" stroke-width="1.3" stroke-dasharray="2 4" fill="none"/><g stroke="var(--ink)" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M45 140 L68 140 L70 116 L100 134 L128 140"/></g><circle cx="40" cy="112" r="13" fill="var(--ink)"/><circle cx="100" cy="134" r="5.5" fill="none" stroke="var(--text-dim)" stroke-width="2.2"/><text x="80" y="163" text-anchor="middle" font-size="13" fill="var(--text-dim)" font-family="system-ui,sans-serif">часто так</text><line x1="180" y1="145" x2="300" y2="145" stroke="var(--muted)" stroke-width="2" stroke-linecap="round"/><g stroke="var(--ink)" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M205 140 L228 140 L230 116"/></g><path d="M230 116 L288 140" stroke="var(--accent)" stroke-width="8" fill="none" stroke-linecap="round"/><circle cx="200" cy="112" r="13" fill="var(--ink)"/><text x="240" y="163" text-anchor="middle" font-size="13" font-weight="700" fill="var(--accent)" font-family="system-ui,sans-serif">нужно так</text></svg>';
@@ -541,11 +554,12 @@ const HOWTO={
 };
 function howto(i){ const e=draft&&draft.exercises[i]; if(!e) return; openSheet(howtoHTML(e)); }
 function howtoHTML(e){
-  const ty=exType(e), hd=HOWTO[norm(e.name)];
+  const ty=exType(e), hd=(e.brief||e.steps)?{brief:e.brief,steps:e.steps,cues:e.cues}:HOWTO[norm(e.name)];
   const tl=ty==="time"?"на время (секунды)":ty==="reps"?"повторы":"вес × повторы";
   let s='<div class="grip-x"></div><h3>'+esc(e.name||"Упражнение")+'</h3><div class="ht-sub">Тип: '+tl+'</div>';
   if(hd&&hd.illo) s+='<div class="illo">'+hd.illo+'</div>';
   if(hd&&hd.brief) s+='<div class="ht-brief"><b>Коротко:</b> '+esc(hd.brief)+'</div>';
+  if(e.workSets)s+=programPlanHint(e);
   if(e.target||e.rest) s+='<div class="ht-params"><span class="chip2">Цель: '+esc(e.target||"—")+'</span>'+(e.rest?'<span class="chip2">Отдых: '+e.rest+' с</span>':'')+'</div>';
   if(hd&&hd.steps) s+='<div class="ht-h">Как делать</div><ol class="ht-steps">'+hd.steps.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ol>';
   if(hd&&hd.cues) s+='<div class="ht-h safe">Важно для безопасности</div><ul class="ht-cues">'+hd.cues.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>';
@@ -554,6 +568,130 @@ function howtoHTML(e){
   s+='<button class="btn btn-ghost btn-block" style="margin-top:16px" onclick="App.closeSheet()">Закрыть</button>';
   return s;
 }
+
+/* Program-only import. Does not replace workouts, measurements or drafts. */
+function validProgramKey(k){ return typeof k==='string' && /^[A-Za-z][A-Za-z0-9_-]{0,70}$/.test(k) && !['constructor','prototype','__proto__'].includes(k); }
+function exercisePlanMeta(t){
+  const o={}; if(!t||typeof t!=='object') return o;
+  ['target','unit','brief'].forEach(k=>{if(typeof t[k]==='string') o[k]=t[k].slice(0,3000);});
+  ['rest','workSets','warmupSets','repMin','repMax','warmupReps','rirTarget'].forEach(k=>{if(typeof t[k]==='number'&&Number.isFinite(t[k])) o[k]=Math.max(0,Math.min(k==='rest'?1200:100,Math.round(t[k])));});
+  if(typeof t.startWeight==='number' && Number.isFinite(t.startWeight) && t.startWeight>=0 && t.startWeight<=2000) o.startWeight=t.startWeight;
+  ['steps','cues','setLabels'].forEach(k=>{if(Array.isArray(t[k])) o[k]=t[k].slice(0,k==='setLabels'?30:12).map(x=>String(x).slice(0,2000));});
+  return o;
+}
+function setSideMeta(s){ return s && typeof s.side==='string'?{side:s.side.slice(0,12)}:{}; }
+function programForDay(id){ const d=dayById(id); return !!(state.activeProgram && d && state.activeProgram.kinds.includes(d.kind)); }
+function safeProgramMeta(p){
+  if(!p || !validProgramKey(p.id) || !Array.isArray(p.kinds)) return null;
+  return {id:p.id,title:String(p.title||'Программа').slice(0,160),kinds:p.kinds.filter(validProgramKey).slice(0,8),
+    rules:Array.isArray(p.rules)?p.rules.slice(0,20).map(x=>String(x).slice(0,3000)):[],cardio:String(p.cardio||'').slice(0,4000)};
+}
+function parseProgram(data){
+  if(!data || data.format!=='gymlog-program' || data.formatVersion!==1 || !validProgramKey(data.id)) throw Error('Неверный формат программы. Нужен gymlog-program версии 1.');
+  if(!Array.isArray(data.days)||data.days.length<1||data.days.length>8) throw Error('В программе должно быть от 1 до 8 дней.');
+  const seen=new Set();
+  const days=data.days.map(d=>{
+    if(!d || !validProgramKey(d.key)||seen.has(d.key)||typeof d.name!=='string'||!d.name.trim()) throw Error('Некорректный или повторяющийся день программы.');
+    seen.add(d.key);
+    const kind=data.id+'_'+d.key; if(!validProgramKey(kind)) throw Error('Слишком длинный идентификатор дня.');
+    if(!Array.isArray(d.exercises)||!d.exercises.length||d.exercises.length>20) throw Error('Неверный список упражнений.');
+    const exercises=d.exercises.map(t=>{
+      if(!t || !['wr','reps','time'].includes(t.type)||!Number.isInteger(t.workSets)||t.workSets<1||t.workSets>12||!Number.isInteger(t.warmupSets)||t.warmupSets<0||t.warmupSets>4) throw Error('Проверь типы и число подходов.');
+      if(t.type!=='wr' && t.warmupSets!==0) throw Error('Разминка отдельными строками поддерживается только для весовых упражнений.');
+      if(!Number.isFinite(t.repMin)||!Number.isFinite(t.repMax)||t.repMin<=0||t.repMax<t.repMin||t.repMax>100) throw Error('Неверный диапазон повторов или времени.');
+      if(!Number.isFinite(t.rest)||t.rest<0||t.rest>1200) throw Error('Неверный отдых.');
+      if(t.startWeight!==undefined&&(!Number.isFinite(t.startWeight)||t.startWeight<0||t.startWeight>2000)) throw Error('Неверный ориентир веса.');
+      if(t.setLabels!==undefined&&(!Array.isArray(t.setLabels)||t.setLabels.length!==t.workSets)) throw Error('Подписи сторон должны соответствовать подходам.');
+      const clean=sanitizeTplEntry(t); if(!clean) throw Error('Упражнение без названия.');
+      return clean;
+    });
+    return {kind:kind,name:d.name.trim().slice(0,160),exercises:exercises};
+  });
+  return {days:days,meta:safeProgramMeta({id:data.id,title:data.title,kinds:days.map(d=>d.kind),rules:data.rules,cardio:data.cardio})};
+}
+let pendingProgram=null;
+function previewProgram(data){
+  let parsed;
+  try{parsed=parseProgram(data);}catch(err){toast(err.message); return;}
+  if(draft || readDraftSnapshot()){
+    openSheet('<h3>Сначала закончи черновик</h3><p>Программа не изменена. Сохрани или удали незавершённую тренировку, затем повтори импорт.</p><button class="btn btn-primary btn-block" onclick="App.closeSheet()">Понятно</button>');return;
+  }
+  pendingProgram=parsed;
+  openSheet('<div class="grip-x"></div><h3>'+esc(parsed.meta.title)+'</h3><p>'+parsed.days.map(d=>esc(d.name)+': '+d.exercises.length+' упражнений').join('<br>')+'</p><p><b>История, замеры, симптомы и настройки не заменяются.</b> Добавятся новые карточки; прежние будут доступны в свёрнутом разделе. Повторный импорт обновит только шаблоны этой программы, без дубликатов дней.</p><p>Веса в программе — ориентиры, а не выполненные подходы. Перед применением будет создана локальная копия прежнего состояния.</p><div class="sheet-actions"><button class="btn btn-primary btn-block" onclick="App.confirmProgramImport()">Применить программу</button><button class="btn btn-ghost btn-block" onclick="App.closeSheet()">Отмена</button></div>');
+}
+function useBuiltInProgram(){ previewProgram(EMBEDDED_PROGRAM); }
+function confirmProgramImport(){
+  if(!pendingProgram) return;
+  if(draft || readDraftSnapshot()){toast('Сначала сохрани или удали черновик');return;}
+  const p=pendingProgram, next=JSON.parse(JSON.stringify(state));
+  next.days.forEach(d=>{d.archived=!p.meta.kinds.includes(d.kind);});
+  p.days.forEach(pd=>{
+    let existing=next.days.find(d=>d.kind===pd.kind);
+    if(!existing){existing={id:gid(),name:pd.name,kind:pd.kind};next.days.push(existing);}
+    existing.name=pd.name;existing.archived=false;
+    next.dayTemplates[pd.kind]=JSON.parse(JSON.stringify(pd.exercises));
+  });
+  next.activeProgram=p.meta;
+  try{
+    localStorage.setItem(PREV_KEY,JSON.stringify(state));
+    localStorage.setItem(KEY,JSON.stringify(next));
+  }catch(err){toast('Не удалось сохранить. Программа НЕ применена; сначала сохрани копию и проверь память.');return;}
+  state=next;mem=state;pendingProgram=null;closeSheet();activeTab='home';navigateReplace('home');toast('Программа добавлена. История сохранена.');
+}
+function programFileClick(){document.getElementById('programFile').click();}
+function onProgramFile(input){
+  const f=input.files&&input.files[0]; if(!f)return;
+  input.value='';if(f.size>3000000){toast('Файл программы слишком большой');return;}
+  const r=new FileReader();r.onerror=()=>toast('Файл не прочитан');
+  r.onload=()=>{try{previewProgram(JSON.parse(r.result));}catch(err){toast('Невалидный JSON программы');}};
+  r.readAsText(f);
+}
+function showProgramHelp(){
+  const p=state.activeProgram||safeProgramMeta({id:EMBEDDED_PROGRAM.id,title:EMBEDDED_PROGRAM.title,kinds:[],rules:EMBEDDED_PROGRAM.rules,cardio:EMBEDDED_PROGRAM.cardio});
+  openSheet('<div class="grip-x"></div><h3>'+esc(p.title)+'</h3><ol class="ht-steps">'+p.rules.map(s=>'<li>'+esc(s)+'</li>').join('')+'</ol><h3 style="margin-top:16px">Кардио</h3><p>'+esc(p.cardio)+'</p><button class="btn btn-primary btn-block" onclick="App.closeSheet()">Понятно</button>');
+}
+function programBanner(){
+  const p=state.activeProgram;if(!p)return '';
+  const ds=p.kinds.map(k=>state.days.find(d=>d.kind===k)).filter(Boolean);
+  const ws=state.workouts.filter(w=>ds.some(d=>d.id===w.templateId));
+  ws.sort((a,b)=>a.date.localeCompare(b.date)||(a.created||0)-(b.created||0));
+  const last=ws[ws.length-1];const pos=last?ds.findIndex(d=>d.id===last.templateId):-1;const next=ds[(pos+1)%ds.length];
+  return '<div class="phase"><div><b>'+esc(p.title)+'</b><div class="ph-sub">'+(next?'Следующая: '+esc(next.name):'Добавь карточку программы')+' · выполнено '+ws.length+' занятий</div><div class="ph-sub">Чередование по посещениям, без календарной разгрузки. <button class="ph-link" onclick="App.showProgramHelp()">Правила и кардио</button></div></div></div>';
+}
+function programPlanHint(e){
+  if(!e.workSets)return '';
+  let s='<b>План:</b> '+e.workSets+' рабочих '+(e.setLabels?'строки ('+e.setLabels.join(', ')+')':'подхода')+(e.warmupSets?' + '+e.warmupSets+' разминочный':'')+'. ';
+  if(e.startWeight!==undefined)s+='Стартовый ориентир: '+fmt(e.startWeight)+' кг ('+esc(e.unit||'вес')+'); разминка около '+fmt(e.startWeight/2)+' кг. ';
+  s+='<br>Подсказки не считаются результатом — вписывай только сделанное. '+(e.unit?'<b>Учёт:</b> '+esc(e.unit)+'. ':'');
+  return '<div class="ht-note plan-note">'+s+'</div>';
+}
+function templateExercise(t){
+  const ty=exType(t),count=Number.isInteger(t.workSets)?t.workSets:1,warm=ty==='wr'?(Number.isInteger(t.warmupSets)?t.warmupSets:0):0;
+  const sets=[];for(let i=0;i<warm;i++)sets.push(makeSet(ty,true));
+  for(let i=0;i<count;i++){const s=makeSet(ty,false);if(t.setLabels&&t.setLabels[i])s.side=t.setLabels[i];sets.push(s);}
+  // Legacy templates keep the original single warm-up row behavior.
+  if(!t.workSets&&ty==='wr')sets[0].warmup=true;
+  return Object.assign({id:gid(),name:t.name,note:t.note||'',type:ty,rir:null,done:false,sets:sets},exercisePlanMeta(t));
+}
+function setPlaceholder(e,s,field){
+  if(!e.workSets)return '0';
+  if(field==='weight')return e.startWeight!==undefined?fmt(e.startWeight*(s.warmup?0.5:1)):'0';
+  if(s.warmup)return String(e.warmupReps||8);
+  return e.repMin?String(e.repMin)+(e.repMax!==e.repMin?'–'+e.repMax:''):'0';
+}
+function programEditorIntro(){
+  if(!draft||!programForDay(draft.templateId))return '';
+  return '<div class="plan-intro"><b>По программе, не по прошлым цифрам.</b> Стартовые веса показаны как подсказки; объём считается только из ввода. <button class="ph-link" onclick="App.showProgramHelp()">Правила</button></div>';
+}
+function tplPlanField(i,key,value){
+  const t=curTplList()[i];if(!t)return;
+  if(key==='workSets'){t.workSets=Math.max(1,Math.min(12,Math.round(num(value))));if(t.setLabels&&t.setLabels.length!==t.workSets)delete t.setLabels;}
+  else if(key==='startWeight'){if(String(value).trim()==='')delete t.startWeight;else t.startWeight=Math.max(0,Math.min(2000,num(value)));}
+  else if(key==='warmupSets')t.warmupSets=Math.max(0,Math.min(4,Math.round(num(value))));
+  else return;
+  persist();
+}
+
 const TPL_KINDS=["A","B","C","warmup","elbow","neck"];
 function cloneDefaultTpl(){ const o={}; TPL_KINDS.forEach(function(k){ o[k]=(DEFAULT_TPL[k]||[]).map(function(t){ return Object.assign({},t); }); }); return o; }
 function defaults(){
@@ -564,11 +702,9 @@ function defaults(){
   };
 }
 function sanitizeTplEntry(t){
-  if(!t||typeof t!=="object") return null;
-  const nm=String(t.name||"").trim(); if(!nm) return null;
-  const ty=(t.type==="time"||t.type==="reps")?t.type:"wr";
-  const restN=Number(t.rest);
-  return {name:nm, type:ty, target:String(t.target||""), rest:(restN>0&&restN<=1200)?Math.round(restN):0, note:String(t.note||"")};
+  if(!t||typeof t!=="object")return null;
+  const nm=String(t.name||"").trim();if(!nm)return null;
+  return Object.assign({name:nm.slice(0,240),type:exType(t),target:String(t.target||"").slice(0,160),rest:Math.max(0,Math.min(1200,Math.round(num(t.rest)))),note:String(t.note||"").slice(0,12000)},exercisePlanMeta(t));
 }
 /* migrate + normalize any loaded/imported object into a safe, current-shape state */
 function normalizeState(d){
@@ -576,11 +712,10 @@ function normalizeState(d){
   let v = typeof d.version==="number" ? d.version : 1;
   // (future migrations switch on v here)
   const out = {version:VERSION, days:[], workouts:[], bodyweight:[], symptoms:[], dayTemplates:{}, settings:{theme:"auto",rest:90,blockStart:null,lastBackupAt:null,tplRenameHintShown:false,onboardShown:false}};
-  if(Array.isArray(d.days)) out.days = d.days.filter(x=>x&&x.id).map(x=>({id:String(x.id),name:String(x.name||"День"),kind:(x.kind==="A"||x.kind==="B"||x.kind==="C")?x.kind:inferKind(x.name)}));
+  if(Array.isArray(d.days)) out.days = d.days.filter(x=>x&&x.id).map(x=>({id:String(x.id),name:String(x.name||"День"),kind:validProgramKey(x.kind)?x.kind:inferKind(x.name),archived:!!x.archived}));
   if(!out.days.length) out.days = defaults().days;
   if(Array.isArray(d.workouts)) out.workouts = d.workouts.filter(w=>w&&w.id&&Array.isArray(w.exercises)).map(w=>{
     var durationMin=Math.round(num(w.durationMin));
-    if(!durationMin && String(w.id)==="idmr93jyjce8ixa") durationMin=140;
     var endedAt=Number(w.endedAt)||0, startedAt=Number(w.startedAt)||0;
     if(durationMin && !endedAt) endedAt=Number(w.created)||0;
     if(durationMin && endedAt && !startedAt) startedAt=endedAt-durationMin*60000;
@@ -588,12 +723,13 @@ function normalizeState(d){
     id:String(w.id), templateId:String(w.templateId||""), templateName:String(w.templateName||""),
     date:isISO(w.date)?w.date:todayISO(), note:String(w.note||""), created:Number(w.created)||0, startedAt:startedAt, endedAt:endedAt, durationMin:durationMin, deload:!!w.deload, cardio:(w.cardio&&typeof w.cardio==="object")?{type:String(w.cardio.type||""),min:Math.round(num(w.cardio.min)),hr:Math.round(num(w.cardio.hr))}:null,
     exercises:w.exercises.map(e=>{ var ty=(e.type==="time"||e.type==="reps")?e.type:"wr"; return {
+      ...exercisePlanMeta(e), ...(typeof e.done==="boolean"?{done:e.done}:{}),
       id:String(e.id||gid()), name:String(e.name||""), note:String(e.note||""), type:ty, rir:(typeof e.rir==="number"?e.rir:null),
-      sets:Array.isArray(e.sets)?e.sets.map((s,idx)=> ty==="time"?{sec:Math.round(num(s.sec))} : ty==="reps"?{reps:Math.round(num(s.reps))} : {weight:Number(num(s.weight)),reps:Math.round(num(s.reps)),warmup:(typeof s.warmup==="boolean"?s.warmup:idx===0)}):[]
+      sets:Array.isArray(e.sets)?e.sets.map((s,idx)=> ty==="time"?{...setSideMeta(s),sec:Math.round(num(s.sec))} : ty==="reps"?{...setSideMeta(s),reps:Math.round(num(s.reps))} : {weight:Number(num(s.weight)),reps:Math.round(num(s.reps)),warmup:(typeof s.warmup==="boolean"?s.warmup:idx===0)}):[]
     };})
     };
   });
-  TPL_KINDS.forEach(function(k){
+  Array.from(new Set(TPL_KINDS.concat(out.days.map(x=>x.kind).filter(validProgramKey)))).forEach(function(k){
     const raw = (d.dayTemplates && typeof d.dayTemplates==="object") ? d.dayTemplates[k] : null;
     const loaded = Array.isArray(raw) ? raw.map(sanitizeTplEntry).filter(Boolean) : null;
     out.dayTemplates[k] = loaded!==null ? loaded : (DEFAULT_TPL[k]||[]).map(function(t){ return Object.assign({},t); });
@@ -608,6 +744,7 @@ function normalizeState(d){
     out.settings.tplRenameHintShown=!!d.settings.tplRenameHintShown;
     out.settings.onboardShown=!!d.settings.onboardShown;
   }
+  if(d.activeProgram){const p=safeProgramMeta(d.activeProgram);if(p)out.activeProgram=p;}
   return out;
 }
 function isValidImport(d){
@@ -643,17 +780,17 @@ function workoutDuration(w){ return Math.round(num(w&&w.durationMin)); }
 function setCount(w){ let c=0; w.exercises.forEach(e=>c+=e.sets.length); return c; }
 function lastWorkout(tid){ let b=null; state.workouts.forEach(w=>{ if(w.templateId!==tid) return; if(!b||w.date>b.date||(w.date===b.date&&(w.created||0)>(b.created||0))) b=w; }); return b; }
 function priorBest(name,beforeISO,excludeId){
-  const nm=norm(name); let best=-Infinity;
-  state.workouts.forEach(w=>{ if(w.id===excludeId) return; if(!(w.date<beforeISO)) return;
-    w.exercises.forEach(e=>{ if(norm(e.name)!==nm) return; e.sets.forEach(s=>{ const x=num(s.weight); if(x>best) best=x; }); }); });
-  return best;
+  const nm=norm(name);let best=-Infinity;
+  state.workouts.forEach(w=>{if(w.id===excludeId||w.deload||w.date>=beforeISO)return;
+    w.exercises.forEach(e=>{if(norm(e.name)!==nm||exType(e)!=='wr')return;
+      e.sets.forEach((s,i)=>{if(!isWarmupSet(e,s,i)&&num(s.reps)>0)best=Math.max(best,num(s.weight));});});});return best;
 }
 function prevSession(tid,name,beforeISO,excludeId){
-  const nm=norm(name); let cand=null;
-  state.workouts.forEach(w=>{ if(w.id===excludeId) return; if(w.templateId!==tid) return; if(!(w.date<beforeISO)) return;
-    if(!w.exercises.some(e=>norm(e.name)===nm)) return;
-    if(!cand||w.date>cand.date||(w.date===cand.date&&(w.created||0)>(cand.created||0))) cand=w; });
-  if(!cand) return null; const ex=cand.exercises.find(e=>norm(e.name)===nm); return ex?ex.sets:null;
+  const nm=norm(name);let candidates=state.workouts.filter(w=>w.id!==excludeId&&w.date<beforeISO&&w.exercises.some(e=>norm(e.name)===nm));
+  if(!programForDay(tid))candidates=candidates.filter(w=>w.templateId===tid);
+  candidates.sort((a,b)=>b.date.localeCompare(a.date)||(b.created||0)-(a.created||0));
+  if(!candidates.length)return null;
+  return candidates[0].exercises.find(e=>norm(e.name)===nm).sets;
 }
 /* Double-progression hint — deliberately narrow: only fires for "weight×reps" targets written as
    "NN" or "NN–NN" (audited: every wr-type exercise in this program's data uses exactly one of these
@@ -665,12 +802,13 @@ function parseWrTarget(target){
   const lo=parseInt(m[1],10), hi=m[2]?parseInt(m[2],10):lo;
   return {lo:lo,hi:hi};
 }
-function progressionHint(tid,name,dateISO,excludeId,target){
-  const rng=parseWrTarget(target); if(!rng) return false;
-  const prev=prevSession(tid,name,dateISO,excludeId); if(!prev||!prev.length) return false;
-  const real=prev.filter(s=>String(s.weight).trim()!==""||String(s.reps).trim()!=="");
-  if(!real.length) return false;
-  return real.every(s=>num(s.reps)>=rng.hi);
+function progressionHint(tid,name,dateISO,excludeId,target,planned){
+  const rng=parseWrTarget(target);if(!rng)return false;
+  const list=state.workouts.filter(w=>w.id!==excludeId&&!w.deload&&w.date<dateISO&&(programForDay(tid)||w.templateId===tid)&&w.exercises.some(e=>norm(e.name)===norm(name)));
+  list.sort((a,b)=>b.date.localeCompare(a.date)||(b.created||0)-(a.created||0));if(!list.length)return false;
+  const e=list[0].exercises.find(e=>norm(e.name)===norm(name));if(exType(e)!=='wr'||typeof e.rir!=='number'||e.rir<2)return false;
+  const work=e.sets.filter((s,i)=>!isWarmupSet(e,s,i)&&num(s.reps)>0&&num(s.weight)>0);
+  return work.length>=(planned||1)&&work.every(s=>num(s.reps)>=rng.hi);
 }
 function allExerciseNames(){
   const map={};
@@ -690,8 +828,7 @@ function exerciseSessions(name){
 function isPRset(weight,top,priorBestW){ const w=num(weight); return w>0 && w===top && priorBestW>-Infinity && top>priorBestW; }
 
 /* ---------- state ---------- */
-const SEED_STATE = {"version":1,"days":[{"id":"idmr4n9lrmspjxr","name":"День A","kind":"A"},{"id":"idmr4n9lrnykpne","name":"День B","kind":"B"},{"id":"idmr4n9lrnkyhfj","name":"День C","kind":"C"}],"workouts":[{"id":"idmr93jyjce8ixa","templateId":"idmr4n9lrmspjxr","templateName":"День A","date":"2026-07-06","note":"","deload":false,"cardio":{"type":"Эллипс","min":50,"hr":123},"exercises":[{"id":"idmr8wnmmve45n9","name":"Жим ногами в тренажёре","note":"Спина прижата, колени по линии стоп, не «складываться» внизу.","type":"wr","rir":3,"sets":[{"weight":25,"reps":12},{"weight":55,"reps":12},{"weight":55,"reps":12},{"weight":55,"reps":12}]},{"id":"idmr8wnmmv88kky","name":"Сгибание ног лёжа/сидя","note":"Опускание 2–3 сек, подконтрольно.","type":"wr","rir":3,"sets":[{"weight":10,"reps":12},{"weight":20,"reps":12},{"weight":20,"reps":12},{"weight":20,"reps":12},{"weight":20,"reps":12}]},{"id":"idmr8wnmmvfdz8h","name":"Жим от груди в тренажёре","note":"Спина в опоре, шея расслаблена, голову не задирать.","type":"wr","rir":2,"sets":[{"weight":14,"reps":12},{"weight":29,"reps":12},{"weight":29,"reps":12},{"weight":29,"reps":12},{"weight":29,"reps":12}]},{"id":"idmr8wnmmvi6od3","name":"Тяга верхнего блока к груди","note":"Нейтральная рукоять, лямки — бережём локоть.","type":"wr","rir":null,"sets":[{"weight":18,"reps":12},{"weight":36,"reps":12},{"weight":36,"reps":12},{"weight":36,"reps":12},{"weight":36,"reps":12}]},{"id":"idmr8wnmmvlh08f","name":"Махи гантелями в стороны","note":"Локти чуть согнуты, плечи вниз, без рывков.","type":"wr","rir":2,"sets":[{"weight":2,"reps":12},{"weight":4,"reps":12},{"weight":4,"reps":12},{"weight":4,"reps":12},{"weight":4,"reps":12}]},{"id":"idmr8wnmmvbu78c","name":"Мёртвый жук","note":"Поясница прижата к полу; тянем противоположные руку и ногу.","type":"reps","rir":2,"sets":[{"reps":6},{"reps":8},{"reps":8},{"reps":8},{"reps":8}]},{"id":"idmr8wnmmv3wvce","name":"Планка","note":"Тело — прямая линия, таз не проваливать; шея в линию со спиной.","type":"time","rir":null,"sets":[{"sec":45},{"sec":45},{"sec":45},{"sec":45}]},{"id":"idmr8wnmmv11p7n","name":"Подъём на носки","note":"По желанию, если осталось время.","type":"wr","rir":3,"sets":[{"weight":0,"reps":12},{"weight":20,"reps":12},{"weight":20,"reps":12},{"weight":20,"reps":12}]}],"created":1783334898840}],"bodyweight":[{"date":"2026-07-06","weight":105.7,"waist":105}],"symptoms":[{"date":"2026-07-06","elbow":0,"neck":2}],"dayTemplates":{"A":[{"name":"Жим ногами в тренажёре","type":"wr","target":"10–12","rest":90,"note":"Спина прижата, колени по линии стоп, не «складываться» внизу."},{"name":"Сгибание ног лёжа/сидя","type":"wr","target":"10–12","rest":75,"note":"Опускание 2–3 сек, подконтрольно."},{"name":"Жим от груди в тренажёре","type":"wr","target":"10–12","rest":90,"note":"Спина в опоре, шея расслаблена, голову не задирать."},{"name":"Тяга верхнего блока к груди","type":"wr","target":"10–12","rest":90,"note":"Нейтральная рукоять, лямки — бережём локоть."},{"name":"Махи гантелями в стороны","type":"wr","target":"12–15","rest":60,"note":"Локти чуть согнуты, плечи вниз, без рывков."},{"name":"Мёртвый жук","type":"reps","target":"8 на сторону","rest":45,"note":"Поясница прижата к полу; тянем противоположные руку и ногу."},{"name":"Планка","type":"time","target":"30–45 с","rest":45,"note":"Тело — прямая линия, таз не проваливать; шея в линию со спиной."},{"name":"Подъём на носки","type":"wr","target":"12–15","rest":45,"note":"По желанию, если осталось время."}],"B":[{"name":"Гоблет-присед","type":"wr","target":"10–12","rest":90,"note":"Есть belt squat — бери его (не грузит шею). Гакк-машину избегаем."},{"name":"Гиперэкстензия (45°)","type":"wr","target":"12–15","rest":75,"note":"Голова в линию с корпусом, подбородок не задирать; можно лёгкий блин к груди."},{"name":"Тяга с упором в грудь","type":"wr","target":"10–12","rest":90,"note":"Грудь в опоре — поясница и шея отдыхают; нейтральный хват."},{"name":"Жим на плечи в тренажёре","type":"wr","target":"10–12","rest":90,"note":"Нейтральный хват или landmine, лёгкий; давит в шею — замени (см. подсказку)."},{"name":"Разгибание на трицепс (канат)","type":"wr","target":"12–15","rest":60,"note":"Локти прижаты к корпусу, без боли в локте."},{"name":"Pallof press","type":"reps","target":"10 на сторону","rest":45,"note":"Антиротация: корпус не разворачивать, держит пресс."},{"name":"Подъём коленей в упоре","type":"reps","target":"10–12","rest":45,"note":"«Капитанское кресло», без раскачки; не грузит хват — плюс для локтя."}],"C":[{"name":"Ягодичный мост / hip thrust","type":"wr","target":"10–12","rest":90,"note":"Голова на опоре, подбородок к груди — шея нейтральна; сжимай ягодицы вверху."},{"name":"Разгибание ног в тренажёре","type":"wr","target":"12–15","rest":60,"note":"Бережно к коленям, задержка вверху 1 секунду."},{"name":"Жим на наклонной (гантели)","type":"wr","target":"10–12","rest":90,"note":"Нейтральные гантели или «бабочка» (pec deck); спина в опоре."},{"name":"Тяга нижнего блока сидя","type":"wr","target":"10–12","rest":90,"note":"Нейтральная рукоять, лямки; спина прямая, тянем к животу, поясницу не круглить."},{"name":"Сгибание «молот»","type":"wr","target":"12–15","rest":60,"note":"Нейтральный хват бережёт локоть; вес небольшой."},{"name":"Фейс-пулл","type":"wr","target":"15","rest":60,"note":"Тяни к лицу, локти высоко; для осанки и здоровья плеч/шеи."},{"name":"Боковая планка","type":"time","target":"20–30 с/сторону","rest":45,"note":"Тело — прямая линия, таз вверх; шеей не дёргать."},{"name":"Скручивания на блоке","type":"wr","target":"12–15","rest":45,"note":"Тянет пресс, а не руки; шеей не дёргать."}],"warmup":[{"name":"Втягивание подбородка (chin tuck)","type":"reps","target":"2×8","rest":20,"note":"Подай подбородок назад («второй подбородок»), удержи 2–3 сек. Бережём шею."},{"name":"Разведения с резиной (band pull-apart)","type":"reps","target":"2×15","rest":20,"note":"Руки прямые, разводи резину, сводя лопатки; плечи вниз."},{"name":"Приседания без веса","type":"reps","target":"10","rest":20,"note":"Разогрев ног и таза, комфортная амплитуда."},{"name":"Вращения запястьями","type":"reps","target":"10–15","rest":20,"note":"Мягкий разогрев предплечий и локтя перед работой."}],"elbow":[{"name":"Изометрия разгибателей запястья","type":"time","target":"5×30–45 сек","rest":30,"note":"Фаза обострения: удержание с лёгким сопротивлением. На тренировки — налокотник."},{"name":"Разгибания запястья (эксцентрика)","type":"reps","target":"3×10–15","rest":45,"note":"Фаза восстановления: опускание 3–4 сек, вес растёт по неделям. Это и есть лечение."}],"neck":[{"name":"Втягивание подбородка (chin tuck)","type":"reps","target":"2–3×8–10","rest":20,"note":"Держи 2–3 сек. Голову не запрокидывай, движение мягкое."},{"name":"Разведения с резиной (band pull-apart)","type":"reps","target":"2×15","rest":20,"note":"Лопатки сводятся, плечи вниз; для осанки."},{"name":"Y-разведения (лёжа на наклонной)","type":"reps","target":"2×12–15","rest":30,"note":"Лёгкие гантели/резина; руки вверх буквой Y, лопатки работают."},{"name":"T-разведения","type":"reps","target":"2×12–15","rest":30,"note":"Руки в стороны буквой T, своди лопатки; без рывков."}]},"settings":{"theme":"auto","rest":60,"blockStart":null,"lastBackupAt":"2026-07-06","tplRenameHintShown":false,"onboardShown":true}};
-let state = normalizeState(loadRaw() || SEED_STATE || defaults());
+let state = normalizeState(loadRaw() || defaults());
 let route = {view:"home"};
 let activeTab = "home";
 let draft = null;
@@ -766,7 +903,7 @@ function render(){
 }
 function renderTopbar(){
   const v=route.view; const tb=document.getElementById("topbar"); let t="";
-  if(v==="home") t='<span class="tb-title"><span class="brand-dot"></span>Дневник</span>';
+  if(v==="home") t='<span class="tb-title"><span class="brand-dot"></span>Дневник <small style="font-size:11px;color:var(--text-dim)">v5.1</small></span>';
   else if(v==="history") t='<span class="tb-title">История</span>';
   else if(v==="progress") t='<span class="tb-title">Прогресс</span>';
   else if(v==="more") t='<span class="tb-title">Ещё</span>';
@@ -781,6 +918,7 @@ function renderTabbar(){
 }
 
 function blockPhase(){
+  if(state.activeProgram)return null;
   const bs=state.settings.blockStart;
   if(!isISO(bs)) return null;
   const d=Math.floor((parseISO(todayISO())-parseISO(bs))/86400000);
@@ -793,6 +931,7 @@ function blockPhase(){
   return {w:w,block:block,start:bs,sets:sets,rir:rir,note:note};
 }
 function phaseBanner(){
+  if(state.activeProgram)return programBanner();
   const p=blockPhase();
   const icon='<svg class="pi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v16h16"/><path d="M7 14l3-4 3 3 4-6"/></svg>';
   if(!p) return '<div class="phase">'+icon+'<div><b>Отметь начало блока</b><div class="ph-sub">Тогда приложение будет подсказывать неделю блока, число подходов и запас сил. <button class="ph-link" onclick="App.setBlockStart()">начать блок сегодня</button></div></div></div>';
@@ -814,7 +953,10 @@ function symptomNudge(){
 function goSymptoms(){ progressMode="sym"; goTab("progress"); }
 function renderHome(){
   let h=phaseBanner()+symptomNudge()+'<div class="sec-title">Тренировочные дни</div>';
-  state.days.forEach(d=>{
+  const ordered=state.days.filter(d=>!d.archived).concat(state.days.filter(d=>d.archived));
+  let oldSection=false;
+  ordered.forEach(d=>{
+    if(d.archived&&!oldSection){h+='<details class="old-days"><summary>Предыдущие дни — история сохранена</summary>';oldSection=true;}
     const lw=lastWorkout(d.id);
     const sub=lw?'<span class="mono">посл.: '+fmtFull(lw.date)+'</span>':'ещё не было';
     h+='<div class="card day-card">'+
@@ -827,12 +969,15 @@ function renderHome(){
         '<button class="btn btn-primary btn-block btn-sm dc-start" onclick="App.startWorkout(\''+d.id+'\')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Начать тренировку</button>'+
        '</div>';
   });
+  if(oldSection)h+="</details>";
   h+='<button class="add-row" onclick="App.addDay()">'+ICON.plus+'Добавить день</button>';
+  if(state.activeProgram)h+='<details class="old-days"><summary>Прежние дополнительные наборы (не часть нового плана)</summary>';
   h+='<div class="sec-title" style="margin-top:26px">Реабилитация и разминка</div>';
   EXTRA.forEach(function(d){ const lw=lastWorkout(d.id); const sub=lw?('<span class="mono">посл.: '+fmtFull(lw.date)+'</span>'):'по 2–3 раза в неделю';
     h+='<div class="card day-card"><div class="dc-top"><div class="dc-main"><div class="dc-name">'+esc(d.name)+'</div><div class="dc-sub'+(lw?' mono':'')+'">'+sub+'</div></div>'+
        '<button class="icon-btn" aria-label="Изменить упражнения" onclick="App.openTplEditor(\''+d.id+'\')">'+ICON.list+'</button></div>'+
        '<button class="btn btn-ghost btn-block btn-sm dc-start" onclick="App.startWorkout(\''+d.id+'\')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Начать</button></div>'; });
+  if(state.activeProgram)h+="</details>";
   h+='<div style="margin-top:18px;font-size:13px;color:var(--text-dim);padding:0 4px;line-height:1.5">Нажмите «Начать тренировку» под нужным днём. Прошлую тренировку можно скопировать и просто поменять цифры.</div>';
   return h;
 }
@@ -872,6 +1017,7 @@ function tplRow(t,i,total){
         '<button class="icon-btn danger" aria-label="Удалить" onclick="App.tplRemoveExercise('+i+')">'+ICON.trash+'</button>'+
       '</div>'+
       '<div class="ex-type-row"><span class="etl">Тип</span><div class="etseg">'+[["wr","вес×повт"],["reps","повторы"],["time","время"]].map(function(tp){ return '<button class="'+(ty===tp[0]?"on":"")+'" onclick="App.tplOnType('+i+',\''+tp[0]+'\')">'+tp[1]+'</button>'; }).join("")+'</div></div>'+
+      (t.workSets?'<div class="plan-edit-fields"><label>Рабочих строк<input class="fin" type="number" min="1" max="12" value="'+t.workSets+'" onchange="App.tplPlanField('+i+',\'workSets\',this.value)"></label><label>Разминочных<input class="fin" type="number" min="0" max="4" value="'+(t.warmupSets||0)+'" onchange="App.tplPlanField('+i+',\'warmupSets\',this.value)"></label></div>'+ (ty==='wr'?'<div class="field"><div class="field-label">Ориентир веса, кг (не результат)</div><input class="fin" type="text" inputmode="decimal" value="'+esc(t.startWeight===undefined?'':t.startWeight)+'" onchange="App.tplPlanField('+i+',\'startWeight\',this.value)"></div>':''):'')+
       '<div class="field" style="margin:2px 2px 0"><div class="field-label">Цель (например «10–12» или «30–45 с»)</div><input class="fin" value="'+esc(t.target||"")+'" placeholder="необязательно" onchange="App.tplOnTarget('+i+',this.value)"></div>'+
       '<div class="field" style="margin:10px 2px 0;max-width:150px"><div class="field-label">Отдых, сек</div><input class="fin mono" type="text" inputmode="numeric" value="'+(t.rest?t.rest:"")+'" placeholder="0" onchange="App.tplOnRest('+i+',this.value)"></div>'+
       '<div class="field" style="margin:10px 2px 4px"><div class="field-label">Заметка-подсказка</div><textarea class="fin" rows="2" placeholder="необязательно" onchange="App.tplOnNote('+i+',this.value)">'+esc(t.note||"")+'</textarea></div>'+
@@ -881,7 +1027,8 @@ function openTplEditor(dayId){ tplOpen={}; go("tpl",{dayId:dayId}); }
 function tplRestoreDefaults(){
   const k=curTplKind(); if(!k) return;
   confirmDialog("Восстановить программу по умолчанию?","Текущий список упражнений для этого дня заменится на программу по умолчанию. Другие дни это не затронет.","Восстановить",true,function(){
-    state.dayTemplates[k]=(DEFAULT_TPL[k]||[]).map(function(t){ return Object.assign({},t); });
+    const pd=parseProgram(EMBEDDED_PROGRAM).days.find(d=>d.kind===k);
+    state.dayTemplates[k]=JSON.parse(JSON.stringify(pd?pd.exercises:(DEFAULT_TPL[k]||[])));
     tplOpen={}; persist(); render(); toast("Программа восстановлена");
   });
 }
@@ -902,7 +1049,7 @@ function tplOnName(i,v){ const list=curTplList(); if(!list[i]) return;
     openSheet('<div class="grip-x"></div><h3>Про переименование</h3><div class="ht-note" style="margin-top:0">История ведётся по названию упражнения: рекорды, серые подсказки «в прошлый раз» и график у нового названия начнутся с чистого листа. Уже сохранённые тренировки при этом не меняются.</div><button class="btn btn-ghost btn-block" style="margin-top:14px" onclick="App.closeSheet()">Понятно</button>');
   } }
 function tplOnType(i,newType){ const list=curTplList(); if(list[i]&&list[i].type!==newType){ list[i].type=newType; persist(); render(); } }
-function tplOnTarget(i,v){ const list=curTplList(); if(list[i]) list[i].target=v; persist(); }
+function tplOnTarget(i,v){const list=curTplList();const t=list[i];if(!t)return;t.target=v;if(t.workSets){const m=/^(\d+)(?:[–-](\d+))?(?:\s|$)/.exec(String(v).trim());if(m){t.repMin=Number(m[1]);t.repMax=Number(m[2]||m[1]);}else{delete t.repMin;delete t.repMax;}}persist();}
 function tplOnRest(i,v){ const list=curTplList(); if(list[i]) list[i].rest=Math.max(0,Math.round(num(v))); persist(); }
 function tplOnNote(i,v){ const list=curTplList(); if(list[i]) list[i].note=v; persist(); }
 
@@ -934,8 +1081,8 @@ function renderDetail(id){
       let dv,pr=false;
       if(ty==="time"){ dv=fmt(s.sec)+' сек'; }
       else if(ty==="reps"){ dv=fmt(s.reps)+' повт'; }
-      else { dv=fmt(s.weight)+' кг × '+fmt(s.reps); pr=(!w.deload)&&isPRset(s.weight,top,pb); }
-      sets+='<div class="det-set"><span class="dn">'+(i+1)+'</span><span class="dv">'+dv+'</span>'+(isWarmupSet(e,s,i)?'<span class="warm-tag">разминка</span>':'')+(pr?'<span class="pr-badge"><span class="flame">'+ICON.flame+'</span>рекорд</span>':'')+'</div>';
+      else { dv=fmt(s.weight)+' кг × '+fmt(s.reps); pr=(!w.deload)&&!isWarmupSet(e,s,i)&&isPRset(s.weight,top,pb); }
+      sets+='<div class="det-set"><span class="dn">'+esc(s.side||String(i+1))+'</span><span class="dv">'+dv+'</span>'+(isWarmupSet(e,s,i)?'<span class="warm-tag">разминка</span>':'')+(pr?'<span class="pr-badge"><span class="flame">'+ICON.flame+'</span>рекорд</span>':'')+'</div>';
     });
     let tl,tv;
     if(ty==="time"){ let t=0; e.sets.forEach(s=>t+=num(s.sec)); tl='суммарно'; tv=t>0?(fmt(t)+' сек'):'—'; }
@@ -970,7 +1117,8 @@ function renderEditor(){
   let h="";
   h+='<div class="field" style="margin-top:4px"><div class="field-label">Дата</div>'+
      '<input class="fin" type="date" value="'+esc(draft.date)+'" onchange="App.onDateChange(this.value)"></div>';
-  h+='<div class="deload-row"><span class="dl-l">Разгрузочная неделя <button class="rq" aria-label="Что это" onclick="App.deloadInfo()">?</button></span><label class="switch"><input type="checkbox" '+(draft.deload?"checked":"")+' onchange="App.onDeload(this.checked)"><span class="sl"></span></label></div>';
+  h+='<div class="deload-row"><span class="dl-l">Лёгкая тренировка <button class="rq" aria-label="Что это" onclick="App.deloadInfo()">?</button></span><label class="switch"><input type="checkbox" '+(draft.deload?"checked":"")+' onchange="App.onDeload(this.checked)"><span class="sl"></span></label></div>';
+  h+=programEditorIntro();
   h+=renderWorkoutProgress();
   h+='<div id="exList">'+draft.exercises.map((e,i)=>exerciseCard(e,i)).join("")+'</div>';
   h+='<button class="add-row" onclick="App.addExercise()">'+ICON.plus+'Упражнение</button>';
@@ -980,7 +1128,7 @@ function renderEditor(){
      '<div style="display:flex;gap:8px">'+
        '<div style="flex:1"><div class="field-label">Минуты</div><input class="fin mono" type="text" inputmode="numeric" value="'+esc(draft.cardio?draft.cardio.min:'')+'" placeholder="0" style="text-align:right" oninput="App.onCardio(\'min\',this.value)"></div>'+
        '<div style="flex:1"><div class="field-label">Пульс (ср.)</div><input class="fin mono" type="text" inputmode="numeric" value="'+esc(draft.cardio?draft.cardio.hr:'')+'" placeholder="—" style="text-align:right" oninput="App.onCardio(\'hr\',this.value)"></div>'+
-     '</div><div style="font-size:11.5px;color:var(--text-dim);margin:8px 2px 10px;line-height:1.4">Zone 2: можешь говорить короткими фразами, но не петь (~60–70% пульса).</div></div>';
+     '</div><div style="font-size:11.5px;color:var(--text-dim);margin:8px 2px 10px;line-height:1.4">Ровное кардио 20–30 минут: можешь говорить полными фразами. 120–130 уд/мин — ориентир, не измеренная персональная зона.</div></div>';
   h+='<div class="field" style="margin-top:16px"><div class="field-label">Заметка к тренировке</div>'+
      '<textarea class="fin" rows="2" placeholder="Самочувствие, сон, общее…" oninput="App.onWorkoutNote(this.value)">'+esc(draft.note||"")+'</textarea></div>';
   h+='<datalist id="exNames">'+allExerciseNames().map(n=>'<option value="'+esc(n)+'">').join("")+'</datalist>';
@@ -1017,16 +1165,16 @@ function exerciseCard(e,i){
     let main,gtxt="",pr=false;
     if(ty==="time"||ty==="reps"){
       const field=ty==="time"?"sec":"reps", unit=ty==="time"?"сек":"повт", val=ty==="time"?s.sec:s.reps;
-      main='<div class="set-main one"><div class="si">'+(j+1)+'</div>'+
-        '<div class="num-wrap"><input class="sin" type="text" inputmode="numeric" value="'+esc(fmtEdit(val))+'" placeholder="0" aria-label="Значение, подход '+(j+1)+'" oninput="App.onSet('+i+','+j+',\''+field+'\',this.value)"><span class="unit">'+unit+'</span></div>'+
+      main='<div class="set-main one"><div class="si">'+esc(s.side||String(j+1))+'</div>'+
+        '<div class="num-wrap"><input class="sin" type="text" inputmode="numeric" value="'+esc(fmtEdit(val))+'" placeholder="'+esc(setPlaceholder(e,s,field))+'" aria-label="Значение, подход '+(j+1)+'" oninput="App.onSet('+i+','+j+',\''+field+'\',this.value)"><span class="unit">'+unit+'</span></div>'+
         '<button class="icon-btn" aria-label="Убрать подход" onclick="App.removeSet('+i+','+j+')">'+ICON.trash+'</button></div>';
       if(g) gtxt="прошлый: "+fmt(ty==="time"?g.sec:g.reps)+(ty==="time"?"с":"");
     } else {
-      pr=isPRset(s.weight,top,pb);
-      main='<div class="set-main"><div class="si">'+(j+1)+'</div>'+
-        '<div class="num-wrap"><input class="sin" type="text" inputmode="decimal" value="'+esc(fmtEdit(s.weight))+'" placeholder="0" aria-label="Вес, подход '+(j+1)+'" oninput="App.onSet('+i+','+j+',\'weight\',this.value)"><span class="unit">кг</span></div>'+
+      pr=!draft.deload&&!isWarmupSet(e,s,j)&&isPRset(s.weight,top,pb);
+      main='<div class="set-main"><div class="si">'+esc(s.side||String(j+1))+'</div>'+
+        '<div class="num-wrap"><input class="sin" type="text" inputmode="decimal" value="'+esc(fmtEdit(s.weight))+'" placeholder="'+esc(setPlaceholder(e,s,'weight'))+'" aria-label="Вес, подход '+(j+1)+'" oninput="App.onSet('+i+','+j+',\'weight\',this.value)"><span class="unit">кг</span></div>'+
         '<div class="xsign">×</div>'+
-        '<input class="sin" type="text" inputmode="numeric" value="'+esc(fmtEdit(s.reps))+'" placeholder="0" aria-label="Повторы, подход '+(j+1)+'" oninput="App.onSet('+i+','+j+',\'reps\',this.value)">'+
+        '<input class="sin" type="text" inputmode="numeric" value="'+esc(fmtEdit(s.reps))+'" placeholder="'+esc(setPlaceholder(e,s,'reps'))+'" aria-label="Повторы, подход '+(j+1)+'" oninput="App.onSet('+i+','+j+',\'reps\',this.value)">'+
         '<button class="icon-btn" aria-label="Убрать подход" onclick="App.removeSet('+i+','+j+')">'+ICON.trash+'</button></div>';
       if(g) gtxt="прошлый: "+fmt(g.weight)+"×"+fmt(g.reps);
     }
@@ -1048,8 +1196,10 @@ function exerciseCard(e,i){
         '<button class="icon-btn danger" aria-label="Удалить упражнение" onclick="App.removeExercise('+i+')">'+ICON.trash+'</button>'+
       '</div>'+
       ((e.target||e.rest)?'':('<div class="ex-type-row"><span class="etl">Тип</span><div class="etseg">'+[["wr","вес×повт"],["reps","повторы"],["time","время"]].map(function(tp){ return '<button class="'+(ty===tp[0]?"on":"")+'" onclick="App.onExType('+i+',\''+tp[0]+'\')">'+tp[1]+'</button>'; }).join("")+'</div></div>'))+
-      ((ty==="wr"&&!draft.deload&&progressionHint(draft.templateId,e.name,draft.date,draft.id,e.target))?('<div class="prog-hint">'+ICON.progress+'В прошлый раз — весь диапазон повторений. Можно добавить +2,5–5 кг.</div>'):'')+
+      ((ty==="wr"&&!draft.deload&&progressionHint(draft.templateId,e.name,draft.date,draft.id,e.target,e.workSets))?('<div class="prog-hint">'+ICON.progress+'В прошлый раз — весь диапазон повторений. Можно обсудить минимальную прибавку: сохрани технику и запас; желательно подтвердить результат ещё раз.</div>'):'')+
       ((e.target||e.rest)?('<div class="ex-hint">Цель: '+esc(e.target||"—")+(e.rest?(' · отдых '+e.rest+' с <button class="ex-timer-link" onclick="App.openTimer('+e.rest+')">запустить</button>'):'')+'</div>'):'')+
+      programPlanHint(e)+
+      (e.brief?'<details class="brief-inline"><summary>Как делать — кратко</summary><p>'+esc(e.brief)+'</p></details>':'')+
       rows+
       '<button class="add-row" onclick="App.addSet('+i+')">'+ICON.plus+'Подход</button>'+
       '<button class="btn btn-ghost btn-block btn-sm finish-ex" onclick="App.finishExercise('+i+')">'+ICON.check+'Упражнение закончено, дальше</button>'+
@@ -1064,7 +1214,7 @@ function refreshPR(i){
   const e=draft.exercises[i]; if(!e) return;
   const pb=priorBest(e.name,draft.date,draft.id);
   let top=0; e.sets.forEach(s=>{ const x=num(s.weight); if(x>top) top=x; });
-  e.sets.forEach((s,j)=>{ const el=document.getElementById("pr-"+i+"-"+j); if(el) el.style.display=isPRset(s.weight,top,pb)?"":"none"; });
+  e.sets.forEach((s,j)=>{ const el=document.getElementById("pr-"+i+"-"+j); if(el) el.style.display=(!draft.deload&&!isWarmupSet(e,s,j)&&isPRset(s.weight,top,pb))?"":"none"; });
 }
 
 function renderProgress(){
@@ -1169,6 +1319,7 @@ function renderMore(){
       '<button class="btn btn-primary btn-block" style="margin-top:12px" onclick="App.exportCSV()">Экспорт и поделиться</button>'+
       '<div style="font-size:12.5px;color:var(--text-dim);margin-top:9px;line-height:1.5">Файл открывается в Excel или Google Таблицах. Строка = подход (для кардио — своя строка), с типом, RIR, длительностью, разминкой и рабочим объёмом.</div>'+
      '</div>';
+  h+='<div class="sec-title">Программа тренировок · v5.1</div><div class="card" style="padding:14px;display:grid;gap:10px"><div class="field-label">Загрузка только программы — без замены истории, веса, талии и симптомов.</div><button class="btn btn-primary btn-block" onclick="App.useBuiltInProgram()">Загрузить готовую программу A/B</button><button class="btn btn-ghost btn-block" onclick="App.programFileClick()">Импорт программы (.json)</button><button class="btn btn-ghost btn-block" onclick="App.showProgramHelp()">Правила новой программы</button></div>';
   h+='<div class="sec-title">Резервная копия</div>';
   h+='<div class="card" style="padding:14px;display:flex;flex-direction:column;gap:9px">'+
       backupNudge()+
@@ -1180,7 +1331,7 @@ function renderMore(){
   h+='<div class="card" style="padding:14px"><button class="btn btn-ghost btn-block" onclick="App.helpSheet()">Как пользоваться приложением</button></div>';
   h+='<div class="sec-title">Опасная зона</div>';
   h+='<div class="card" style="padding:14px"><button class="btn btn-ghost btn-block danger-btn" onclick="App.clearAll()">Удалить все данные</button></div>';
-  h+='<div style="text-align:center;color:var(--text-ghost);font-size:12px;margin:22px 0 6px">Дневник тренировок · данные хранятся только на этом устройстве</div>';
+  h+='<div style="text-align:center;color:var(--text-ghost);font-size:12px;margin:22px 0 6px">Дневник тренировок v5.1 · данные хранятся только на этом устройстве</div>';
   return h;
 }
 
@@ -1228,6 +1379,7 @@ function deleteDay(id){ const d=state.days.find(x=>x.id===id); if(!d) return; co
 
 /* ---------- workout flow ---------- */
 function startWorkout(dayId){
+  if(programForDay(dayId)){beginBlank(dayId);return;}
   const d=dayById(dayId); if(!d) return; const last=lastWorkout(dayId);
   const tpl0=(d&&state.dayTemplates[d.kind])||[];
   const blankLabel=tpl0.length?"Начать по программе":"Пустая тренировка";
@@ -1241,7 +1393,10 @@ function startWorkout(dayId){
   } else beginBlank(dayId);
 }
 function newDraft(dayId,exs){ const d=dayById(dayId); const ph=blockPhase(); const dl0=!!(ph&&ph.w===4); draft={id:null,templateId:dayId,templateName:d?d.name:"",date:todayISO(),note:"",created:null,startedAt:Date.now(),endedAt:null,durationMin:null,deload:dl0,cardio:{type:"",min:"",hr:""},exercises:exs}; draftTouched=false; allowLeave=false; go("editor"); }
-function beginBlank(dayId){ closeSheet(); const d=dayById(dayId); const tpl=(d&&state.dayTemplates[d.kind])||[]; const exs=tpl.length?tpl.map(t=>{ var ty=(t.type==="time"||t.type==="reps")?t.type:"wr"; return {id:gid(),name:t.name,note:t.note||"",target:t.target||"",rest:t.rest||0,type:ty,sets:[makeSet(ty,ty==="wr")]}; }):[{id:gid(),name:"",note:"",type:"wr",sets:[makeSet("wr",true)]}]; newDraft(dayId,exs); }
+function beginBlank(dayId){
+  closeSheet();const d=dayById(dayId);const tpl=d&&state.dayTemplates[d.kind]||[];
+  newDraft(dayId,tpl.length?tpl.map(templateExercise):[{id:gid(),name:"",note:"",type:"wr",sets:[makeSet("wr",true)]}]);
+}
 function beginFrom(dayId,srcId){ closeSheet(); const src=state.workouts.find(x=>x.id===srcId); if(!src){ beginBlank(dayId); return; }
   newDraft(dayId, src.exercises.map(e=>draftFromSaved(e,false))); }
 function repeatWorkout(id){ const src=state.workouts.find(x=>x.id===id); if(!src) return;
@@ -1266,9 +1421,9 @@ function toggleExercise(i){ const e=draft.exercises[i]; if(!e) return; e.open=!e
 function onExType(i,newType){ const e=draft.exercises[i]; if(!e) return; if(exType(e)===newType) return; e.type=newType; e.sets=e.sets.map(function(_,idx){ return makeSet(newType,newType==="wr"&&idx===0); }); e.rir=null; draftTouched=true; persistDraft(); const el=document.getElementById("exCard-"+i); if(el) el.outerHTML=exerciseCard(e,i); refreshTotals(); }
 function howtoFor(wid,idx){ const w=state.workouts.find(function(x){ return x.id===wid; }); if(!w) return; const e=w.exercises[idx]; if(!e) return; openSheet(howtoHTML(e)); }
 function setRir(i,n){ const e=draft.exercises[i]; if(!e) return; e.rir=(e.rir===n)?null:n; draftTouched=true; persistDraft(); const el=document.getElementById("exCard-"+i); if(el) el.outerHTML=exerciseCard(e,i); }
-function rirInfo(){ openSheet('<div class="grip-x"></div><h3>Запас сил (RIR)</h3><div class="ht-note" style="margin-top:0">Сколько повторов ты ещё мог бы сделать в подходе с чистой техникой. По программе держим запас 1–3 — то есть не до отказа: на неделях 1–2 около 3, на 3–4 — 1–2. Отметь оставшийся запас, чтобы видеть, держишь ли буфер.</div><button class="btn btn-ghost btn-block" style="margin-top:14px" onclick="App.closeSheet()">Понятно</button>'); }
+function rirInfo(){openSheet('<h3>Запас повторов (RIR)</h3><p>Оцени, сколько дополнительных повторов ты смог бы выполнить с той же техникой. В этой программе ориентир 2–3. Отмечай запас в последнем рабочем подходе, не в разминке. Неизвестный запас лучше оставить пустым.</p><button class="btn btn-primary btn-block" onclick="App.closeSheet()">Понятно</button>');}
 function onDeload(v){ draft.deload=!!v; draftTouched=true; persistDraft(); const lst=document.getElementById("exList"); if(lst) lst.innerHTML=draft.exercises.map((e,i)=>exerciseCard(e,i)).join(""); }
-function deloadInfo(){ openSheet('<div class="grip-x"></div><h3>Разгрузочная неделя</h3><div class="ht-note" style="margin-top:0">Плановая лёгкая неделя (примерно раз в 4 недели): вес снижаем на 40–50%, объём меньше, без прогрессии — чтобы суставы и сухожилия отдохнули. На разгрузке рекорды (огонёк) не отмечаются. Включи переключатель на такой тренировке.</div><button class="btn btn-ghost btn-block" style="margin-top:14px" onclick="App.closeSheet()">Понятно</button>'); }
+function deloadInfo(){openSheet('<h3>Лёгкая тренировка</h3><p>Ручная отметка облегчённого занятия. В программе A/B она не включается по номеру недели. По самочувствию можно уменьшить число подходов и/или вес, оставив больший запас. Это не обязательное снижение веса на 40–50%.</p><button class="btn btn-primary btn-block" onclick="App.closeSheet()">Понятно</button>');}
 function addExercise(){ draft.exercises.push({id:gid(),name:"",note:"",open:true,sets:[makeSet("wr",true)]}); draftTouched=true; persistDraft(); render(); const c=document.querySelectorAll(".name-in"); const last=c[c.length-1]; if(last) last.focus(); }
 function finishExercise(i){ const e=draft.exercises[i]; if(!e) return; e.done=true; e.open=false; const next=nextIncompleteIndex(i); if(next>=0) draft.exercises[next].open=true; draftTouched=true; persistDraft(); render(); if(next>=0){ scrollToExercise(next); toast("Открыто следующее упражнение"); } else toast("Все упражнения отмечены"); }
 function toggleWarmup(i,j){ const e=draft.exercises[i]; if(!e||exType(e)!=="wr"||!e.sets[j]) return; e.sets[j].warmup=!isWarmupSet(e,e.sets[j],j); draftTouched=true; persistDraft(); const el=document.getElementById("exCard-"+i); if(el) el.outerHTML=exerciseCard(e,i); refreshTotals(); }
@@ -1293,9 +1448,10 @@ function validateDraftIssues(){
         if(isWarmupSet(e,s,idx)) warm++; else work++;
       });
       if(filled.length && work===0) issues.push(name+": все подходы отмечены как разминка");
-      if(work>0 && work<4) issues.push(name+": рабочих подходов "+work+" вместо 4");
-      if(warm===0 && work>0) issues.push(name+": нет разминочного подхода");
-    }
+      const expected=e.workSets||4;
+      if(work>0 && work<expected) issues.push(name+": рабочих подходов "+work+" вместо "+expected+" по плану (можно сохранить сокращённое занятие)");
+      if(warm===0 && work>0 && e.warmupSets!==0) issues.push(name+": нет разминочного подхода");
+    } else if(e.workSets && filled.length<e.workSets){issues.push(name+": заполнено "+filled.length+" из "+e.workSets+" строк по плану");}
   });
   const dur=draft.startedAt?Math.round((Date.now()-draft.startedAt)/60000):0;
   if(dur>0 && dur<10 && draft.exercises.some(function(e){ return (e.sets||[]).some(function(s){ return String(s.weight||s.reps||s.sec).trim()!==""; }); })) issues.push("Длительность меньше 10 минут — проверь, не открыт ли черновик заново перед сохранением");
@@ -1313,8 +1469,8 @@ function saveDraft(force){
   const exs=[];
   draft.exercises.forEach(e=>{
     var ty=exType(e);
-    const sets=e.sets.filter(s=> ty==="time"?String(s.sec).trim()!=="" : ty==="reps"?String(s.reps).trim()!=="" : (String(s.weight).trim()!==""||String(s.reps).trim()!=="")).map((s,idx)=> ty==="time"?{sec:Math.round(num(s.sec))} : ty==="reps"?{reps:Math.round(num(s.reps))} : {weight:num(s.weight),reps:Math.round(num(s.reps)),warmup:isWarmupSet(e,s,idx)});
-    if((e.name&&e.name.trim())||sets.length) exs.push({id:e.id||gid(),name:(e.name||"").trim(),note:(e.note||"").trim(),type:ty,rir:(typeof e.rir==="number"?e.rir:null),sets:sets});
+    const sets=e.sets.filter(s=> ty==="time"?String(s.sec).trim()!=="" : ty==="reps"?String(s.reps).trim()!=="" : (String(s.weight).trim()!==""||String(s.reps).trim()!=="")).map((s,idx)=> ty==="time"?{...setSideMeta(s),sec:Math.round(num(s.sec))} : ty==="reps"?{...setSideMeta(s),reps:Math.round(num(s.reps))} : {weight:num(s.weight),reps:Math.round(num(s.reps)),warmup:isWarmupSet(e,s,idx)});
+    if((e.name&&e.name.trim())||sets.length) exs.push({...exercisePlanMeta(e),done:!!e.done,id:e.id||gid(),name:(e.name||"").trim(),note:(e.note||"").trim(),type:ty,rir:(typeof e.rir==="number"?e.rir:null),sets:sets});
   });
   let cardio=null;
   if(draft.cardio && (String(draft.cardio.type).trim()!==""||String(draft.cardio.min).trim()!=="")) cardio={type:(draft.cardio.type||"").trim(),min:Math.round(num(draft.cardio.min)),hr:Math.round(num(draft.cardio.hr))};
@@ -1360,33 +1516,23 @@ function csvCell(v){ v=String(v==null?"":v); if(/^[=\-+@\t\r]/.test(v)) v="'"+v;
 function csvNum(n){ return String(n).replace(".",","); }
 function typeLabel(ty){ return ty==="time"?"время":ty==="reps"?"повторы":"вес×повторы"; }
 function buildCSV(fromISO,toISO,all){
-  const header=["Дата","День","Длительность (мин)","Разгрузка","Тип","Упражнение","Подход","Разминка","Вес (кг)","Повторы","Секунды","Объём (кг)","Рабочий объём (кг)","RIR","Кардио (мин)","Пульс","Заметка упражнения","Заметка тренировки"];
-  const rows=[header.map(csvCell).join(";")];
-  const list=state.workouts.slice().sort((a,b)=> a.date<b.date?-1:a.date>b.date?1:((a.created||0)-(b.created||0)));
-  list.forEach(w=>{ if(!all){ if(w.date<fromISO||w.date>toISO) return; }
-    const dl=w.deload?"да":"", dur=workoutDuration(w)||"";
+  const header=["Дата","День","Длительность (мин)","Разгрузка","Тип","Упражнение","Подход","Разминка","Вес (кг)","Повторы","Секунды","Объём (кг)","Рабочий объём (кг)","RIR","Кардио (мин)","Пульс","Заметка упражнения","Заметка тренировки","Сторона","План рабочих строк","Единица веса / повтора"];
+  const rows=[header.map(csvCell).join(';')];
+  const list=state.workouts.slice().sort((a,b)=>a.date.localeCompare(b.date)||(a.created||0)-(b.created||0));
+  list.forEach(w=>{
+    if(!all&&(w.date<fromISO||w.date>toISO))return;
+    const pre=[fmtDMY(w.date),w.templateName,workoutDuration(w)||'',w.deload?'да':''];
     w.exercises.forEach(e=>{
-      var ty=exType(e);
-      if(!e.sets.length){
-        rows.push([fmtDMY(w.date),csvCell(w.templateName),dur,dl,typeLabel(ty),csvCell(e.name),"","","","","","","",(e.rir||""),"","",csvCell(e.note||""),csvCell(w.note||"")].join(";"));
-        return;
-      }
-      e.sets.forEach((s,i)=>{
-        var wt="",rp="",sec="",vol="",workVol="",warm="";
-        if(ty==="wr"){
-          wt=csvNum(num(s.weight)); rp=Math.round(num(s.reps)); const vv=num(s.weight)*num(s.reps); vol=csvNum(vv);
-          if(isWarmupSet(e,s,i)) warm="да"; else workVol=csvNum(vv);
-        }
-        else if(ty==="reps"){ rp=Math.round(num(s.reps)); }
-        else { sec=Math.round(num(s.sec)); }
-        rows.push([fmtDMY(w.date),csvCell(w.templateName),dur,dl,typeLabel(ty),csvCell(e.name),i+1,warm,wt,rp,sec,vol,workVol,(e.rir||""),"","",csvCell(e.note||""),csvCell(w.note||"")].join(";"));
+      const ty=exType(e);const entries=e.sets.length?e.sets:[null];
+      entries.forEach((s,i)=>{
+        const warm=s&&isWarmupSet(e,s,i),vol=s&&ty==='wr'?num(s.weight)*num(s.reps):null;
+        const row=pre.concat([typeLabel(ty),e.name,s?i+1:'',warm?'да':'',s&&ty==='wr'?csvNum(num(s.weight)):'',s&&ty!=='time'?Math.round(num(s.reps)):'',s&&ty==='time'?Math.round(num(s.sec)):'',vol!==null?csvNum(vol):'',vol!==null&&!warm?csvNum(vol):'',e.rir==null?'':e.rir,'','',e.note||'',w.note||'',s?s.side||'':'',e.workSets||'',e.unit||'']);
+        rows.push(row.map(csvCell).join(';'));
       });
     });
-    if(w.cardio){
-      rows.push([fmtDMY(w.date),csvCell(w.templateName),dur,dl,"кардио",csvCell(w.cardio.type||"Кардио"),"","","","","","","","",(w.cardio.min||""),(w.cardio.hr||""),"",csvCell(w.note||"")].join(";"));
-    }
+    if(w.cardio)rows.push(pre.concat(['кардио',w.cardio.type||'Кардио','','','','','','','','',w.cardio.min||'',w.cardio.hr||'','',w.note||'','','','']).map(csvCell).join(';'));
   });
-  return "\uFEFF"+rows.join("\r\n");
+  return '\uFEFF'+rows.join('\r\n');
 }
 function exportCSV(){
   if(!state.workouts.length){ toast("Нет тренировок для экспорта"); return; }
@@ -1404,6 +1550,7 @@ function onImportFile(input){
   const f=input.files&&input.files[0]; if(!f) return;
   const r=new FileReader();
   r.onload=function(){ let data; try{ data=JSON.parse(r.result); }catch(e){ toast("Файл повреждён"); input.value=""; return; }
+    if(data&&data.format==="gymlog-program"){input.value="";previewProgram(data);return;}
     if(!isValidImport(data)){ toast("Это не похоже на копию"); input.value=""; return; }
     confirmDialog("Восстановить данные?","Текущие записи будут заменены данными из файла. Копия текущих данных сохранится на случай ошибки.","Восстановить",true,function(){
       try{ localStorage.setItem(PREV_KEY, JSON.stringify(state)); }catch(e){}
@@ -1537,6 +1684,7 @@ function helpSheet(){
 }
 function init(){
   storageOK=storageAvailable();
+  document.getElementById("programFile").addEventListener("change",function(){onProgramFile(this);});
   applyTheme();
   try{ matchMedia("(prefers-color-scheme: dark)").addEventListener("change",function(){ if(state.settings.theme==="auto") applyTheme(); }); }catch(e){}
   try{ document.getElementById("importFile").addEventListener("change",function(){ onImportFile(this); }); }catch(e){}
@@ -1549,6 +1697,7 @@ function init(){
 }
 
 return {
+  useBuiltInProgram,confirmProgramImport,programFileClick,onProgramFile,showProgramHelp,tplPlanField,
   init,go,goTab,histBack,cardKey,openDetail,
   startWorkout,beginBlank,beginFrom,repeatWorkout,editWorkout,deleteWorkout,saveDraft,resumeDraft,dropDraft,
   addDay,renameDay,deleteDay,
@@ -1564,8 +1713,8 @@ document.addEventListener("DOMContentLoaded", App.init);
 
 /* PWA: офлайн-модуль подключается только на настоящем https-хостинге (GitHub Pages).
    При открытии как одиночный файл или внутри APK-обёртки эта строка ничего не делает. */
-if (location.protocol === "https:" && "serviceWorker" in navigator) {
-  try { navigator.serviceWorker.register("./sw.js").catch(function(){}); } catch (e) {}
+if ((location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1") && "serviceWorker" in navigator) {
+  try { navigator.serviceWorker.register("./sw.js",{updateViaCache:"none"}).catch(function(){}); } catch (e) {}
 }
 </script>
 </body>
